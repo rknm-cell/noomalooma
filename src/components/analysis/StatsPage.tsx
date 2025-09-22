@@ -97,7 +97,7 @@ export default function StatsPage({ patterns, onNext, onPrev }: StatsPageProps) 
             onClick={onNext}
             className={`text-${colors.next} text-xl font-semibold hover:opacity-70 transition-opacity`}
           >
-            What's Next →
+            What&apos;s Next →
           </button>
         </motion.div>
       </motion.div>

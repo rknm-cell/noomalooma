@@ -28,9 +28,9 @@ export default function LogConfirmation({ moment, onContinue }: LogConfirmationP
   };
 
   return (
-    <div className="w-full text-center">
+    <div className="w-full text-center flex flex-col items-center justify-start">
       {/* Emoji and Text Pill */}
-      <div className={`${moment.color} rounded-full px-6 py-4 mb-8 flex items-center justify-center mx-auto max-w-md`}>
+      <div className={`${moment.color} rounded-full px-6 py-4 mb-8 flex items-start justify-center mx-auto max-w-md`}>
         <div className="text-3xl mr-3">{moment.emoji}</div>
         <p className="text-lg font-light font-jakarta text-primary leading-relaxed">
           {moment.text}

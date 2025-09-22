@@ -34,10 +34,10 @@ export default function EmojiSelectionStep({
 
   return (
     <>
-      <div className="w-full text-center">
+      <div className="w-full text-center flex flex-col items-center justify-start">
         <h3 className="text-xl font-light font-schoolbell text-primary mb-6">{prompt}</h3>
         <p className="text-sm font-light font-jakarta text-gray-600 mb-4">drag an emoji into this box to select</p>
-        <div className={`w-full h-20 border-2 border-dashed rounded-xl flex items-center justify-center transition-colors ${
+        <div className={`w-full h-20 border-2 border-dashed rounded-xl flex items-start justify-center pt-4 transition-colors ${
           isDragOverDropZone 
             ? 'border-green-500 bg-green-50' 
             : 'border-gray-300 bg-gray-50'

@@ -70,7 +70,7 @@ export default function LogPage() {
       timestamp: new Date(),
       text,
       emoji: selectedEmoji,
-      color: selectedColor,
+      color: color, // Use the selected color parameter, not the state
       mood: emojiToMood[selectedEmoji as keyof typeof emojiToMood] || 'Playful',
       tags: []
     };

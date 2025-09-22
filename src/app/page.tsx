@@ -47,21 +47,18 @@ export default function HomePage() {
             style={{ color: colorsState[index] }}
             initial={{ y: 0 }}
             animate={{ 
-              y: [0, -20, 0],
+              y: [0, -20, 0]
             }}
             transition={{
               duration: 0.6,
-              delay: index * 0.1,
-              ease: "easeOut",
-              // Default transition for hover exit
-              y: { duration: 0.5, ease: "easeOut" }
+              delay: index * 0.15, // Sequential timing for each letter
+              ease: "easeOut"
             }}
             whileHover={{ 
               y: -15,
-              // Transition for hover enter
               transition: { duration: 0.2, ease: "easeOut" }
             }}
-              onHoverStart={() => handleLetterHover(index)}
+            onHoverStart={() => handleLetterHover(index)}
             whileTap={{ 
               scale: 0.9,
               transition: { duration: 0.1 }

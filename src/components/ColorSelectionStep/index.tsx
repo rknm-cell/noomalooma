@@ -9,7 +9,7 @@ interface ColorSelectionStepProps {
 
 export default function ColorSelectionStep({ colors, selectedColor, onColorSelect, prompt }: ColorSelectionStepProps) {
   return (
-    <div className="w-full text-center">
+    <div className="w-full text-center flex flex-col items-center justify-start">
       <h3 className="text-xl font-light font-schoolbell text-primary mb-6">{prompt}</h3>
       <div className="flex flex-wrap gap-4 justify-center">
         {colors.map((color) => (
