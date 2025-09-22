@@ -3,4 +3,17 @@
 @theme {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  
+  /* Semantic Color Palette */
+  --color-bg-main: #f9f5ef;
+  --color-green: #caee00;
+  --color-purple: #4b19bb;
+  --color-pink: #fe9fde;
+  --color-orange: #ffae0d;
+  --color-lavender: #daaaff;
+  --color-blue: #b1bbed;
+  --color-fuschia: #ff42d3;
+  --color-tan: #ffce92;
+  --color-text-primary: #000000;
+  --color-text-white: #ffffff;
 }
