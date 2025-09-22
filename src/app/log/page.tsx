@@ -89,7 +89,19 @@ export default function LogPage() {
   };
 
   const handleBack = () => {
-    router.push('/');
+    if (currentStep === 'text') {
+      // If on text step, go back to home
+      router.push('/');
+    } else if (currentStep === 'emoji') {
+      // Go back to text step
+      setCurrentStep('text');
+    } else if (currentStep === 'color') {
+      // Go back to emoji step
+      setCurrentStep('emoji');
+    } else if (currentStep === 'confirmation') {
+      // Go back to color step
+      setCurrentStep('color');
+    }
   };
 
   return (
@@ -104,8 +116,8 @@ export default function LogPage() {
         {/* Back Button */}
         <motion.button
           onClick={handleBack}
-          className="w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center border border-gray-200 shadow-sm"
-          whileHover={{ scale: 1.05, backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+          className="w-10 h-10 rounded-full flex items-center justify-center"
+          whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
           <Image 

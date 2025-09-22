@@ -74,21 +74,8 @@ export default function BouncingEmoji({
   };
 
   const handleDrag = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
-    // Update position during drag - match mouse movement exactly
+    // Only check if dragging over drop zone - let Framer Motion handle position
     if (info) {
-      setBouncingEmojis(prev => prev.map(e => 
-        e.id === emoji.id 
-          ? { 
-              ...e, 
-              x: Math.max(0, Math.min(window.innerWidth - e.size, info.point.x - e.size/2)),
-              y: Math.max(0, Math.min(window.innerHeight - e.size, info.point.y - e.size/2)),
-              vx: 0,
-              vy: 0
-            }
-          : e
-      ));
-      
-      // Check if dragging over drop zone
       const cardElement = document.querySelector('#main-card');
       if (cardElement) {
         const cardRect = cardElement.getBoundingClientRect();
@@ -107,9 +94,9 @@ export default function BouncingEmoji({
         selectedEmoji === emoji.emoji ? `${selectedColor} rounded-full p-2` : ''
       }`}
       onDragEnd={handleDragEnd}
-      style={{
-        left: emoji.x,
-        top: emoji.y,
+      animate={{
+        x: emoji.x,
+        y: emoji.y,
         width: emoji.size,
         height: emoji.size,
       }}
