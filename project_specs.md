@@ -45,6 +45,7 @@ A mobile-first web app for capturing daily play moments and reflecting on person
 ### Visual Style
 - **Playful & Colorful**: Vibrant, joyful interface
 - **Simple & Clean**: Minimal complexity, maximum delight
+- **2D Design**: Flat design with no drop shadows or 3D effects
 - **Mobile-First**: Touch-friendly, responsive design
 - **Visually Cohesive**: Consistent design language throughout
 

@@ -132,6 +132,13 @@ The following Tailwind classes are available for use:
 <div class="text-tan">❌ Tan text (not recommended)</div>
 ```
 
+## Design Principles
+
+### Visual Style Guidelines
+- **2D Design**: Flat design approach with no drop shadows, gradients, or 3D effects
+- **Clean Aesthetics**: Simple, uncluttered visual elements
+- **Color-First**: Use vibrant colors as the primary visual differentiator
+
 ## Accessibility Considerations
 
 - All color combinations meet WCAG AA contrast requirements
