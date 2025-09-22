@@ -238,14 +238,12 @@ export default function AnalysisPage() {
             <div className="text-6xl mb-4">🎉</div>
             <h1 className="text-3xl font-bold text-primary mb-4">Play Wrapped Complete!</h1>
             <p className="text-lg text-primary mb-6">Thanks for exploring your playful side!</p>
-            <motion.a
+            <a
               href="/"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="inline-block bg-green text-primary px-6 py-3 rounded-full font-semibold"
+              className="text-green text-xl font-semibold hover:opacity-70 transition-opacity"
             >
               Back to Play
-            </motion.a>
+            </a>
           </motion.div>
         </div>
       );

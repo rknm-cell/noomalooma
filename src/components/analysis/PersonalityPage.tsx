@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 
 interface PersonalityPageProps {
   personality: {
@@ -12,7 +13,28 @@ interface PersonalityPageProps {
   onPrev: () => void;
 }
 
+const availableColors = ['purple', 'pink', 'orange', 'lavender', 'blue', 'fuschia'];
+
 export default function PersonalityPage({ personality, onNext, onPrev }: PersonalityPageProps) {
+  const [colors, setColors] = useState<{ heading: string; title: string; description: string; back: string; next: string }>({
+    heading: 'purple',
+    title: 'primary',
+    description: 'primary',
+    back: 'tan',
+    next: 'green'
+  });
+
+  useEffect(() => {
+    const randomColors = {
+      heading: availableColors[Math.floor(Math.random() * availableColors.length)] || 'purple',
+      title: availableColors[Math.floor(Math.random() * availableColors.length)] || 'pink',
+      description: 'primary',
+      back: availableColors[Math.floor(Math.random() * availableColors.length)] || 'orange',
+      next: availableColors[Math.floor(Math.random() * availableColors.length)] || 'blue'
+    };
+    setColors(randomColors);
+  }, []);
+
   return (
     <div className="min-h-screen bg-main flex flex-col items-center justify-center p-4">
       <motion.div
@@ -28,18 +50,18 @@ export default function PersonalityPage({ personality, onNext, onPrev }: Persona
           transition={{ delay: 0.2 }}
           className="mb-8"
         >
-          <h1 className="text-5xl font-bold text-primary mb-4">
+          <h1 className={`text-5xl font-bold text-${colors.heading} mb-4`}>
             Your Play Type
           </h1>
           <p className="text-xl text-primary/70">The personality behind your play</p>
         </motion.div>
 
-        {/* Personality Card */}
+        {/* Personality Content */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-pink rounded-3xl p-8 mb-8 shadow-lg"
+          className="mb-12"
         >
           <motion.div
             initial={{ scale: 0 }}
@@ -49,7 +71,7 @@ export default function PersonalityPage({ personality, onNext, onPrev }: Persona
           >
             {personality.emoji}
           </motion.div>
-          <h2 className="text-4xl font-bold text-primary mb-4">
+          <h2 className={`text-4xl font-bold text-${colors.title} mb-4`}>
             You're {personality.title}
           </h2>
           <p className="text-primary text-xl leading-relaxed">{personality.description}</p>
@@ -60,24 +82,20 @@ export default function PersonalityPage({ personality, onNext, onPrev }: Persona
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
-          className="flex gap-4"
+          className="flex gap-8"
         >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <button
             onClick={onPrev}
-            className="bg-tan text-primary px-6 py-3 rounded-full font-semibold text-lg"
+            className={`text-${colors.back} text-xl font-semibold hover:opacity-70 transition-opacity`}
           >
             ← Back
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          </button>
+          <button
             onClick={onNext}
-            className="bg-green text-primary px-6 py-3 rounded-full font-semibold text-lg"
+            className={`text-${colors.next} text-xl font-semibold hover:opacity-70 transition-opacity`}
           >
             See Your Stats →
-          </motion.button>
+          </button>
         </motion.div>
       </motion.div>
     </div>

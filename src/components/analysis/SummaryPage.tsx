@@ -1,13 +1,31 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 
 interface SummaryPageProps {
   summary: string;
   onNext: () => void;
 }
 
+const availableColors = ['purple', 'pink', 'orange', 'lavender', 'blue', 'fuschia'];
+
 export default function SummaryPage({ summary, onNext }: SummaryPageProps) {
+  const [colors, setColors] = useState<{ heading: string; text: string; button: string }>({
+    heading: 'purple',
+    text: 'primary',
+    button: 'green'
+  });
+
+  useEffect(() => {
+    const randomColors = {
+      heading: availableColors[Math.floor(Math.random() * availableColors.length)] || 'purple',
+      text: 'primary',
+      button: availableColors[Math.floor(Math.random() * availableColors.length)] || 'blue'
+    };
+    setColors(randomColors);
+  }, []);
+
   return (
     <div className="min-h-screen bg-main flex flex-col items-center justify-center p-4">
       <motion.div
@@ -29,14 +47,14 @@ export default function SummaryPage({ summary, onNext }: SummaryPageProps) {
           <p className="text-xl text-primary/70">This week in your playful life</p>
         </motion.div>
 
-        {/* Summary Card */}
+        {/* Summary Content */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-white rounded-3xl p-8 mb-8 shadow-lg"
+          className="mb-12"
         >
-          <h2 className="text-3xl font-bold text-purple mb-6">This Week You...</h2>
+          <h2 className={`text-3xl font-bold text-${colors.heading} mb-6`}>This Week You...</h2>
           <p className="text-primary text-2xl leading-relaxed">{summary}</p>
         </motion.div>
 
@@ -45,10 +63,8 @@ export default function SummaryPage({ summary, onNext }: SummaryPageProps) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
           onClick={onNext}
-          className="bg-green text-primary px-8 py-4 rounded-full font-bold text-xl"
+          className={`text-${colors.button} text-2xl font-semibold hover:opacity-70 transition-opacity`}
         >
           Discover Your Play Type →
         </motion.button>

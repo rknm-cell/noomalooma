@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 
 interface RecommendationsPageProps {
   recommendations: string[];
@@ -8,7 +9,26 @@ interface RecommendationsPageProps {
   onPrev: () => void;
 }
 
+const availableColors = ['purple', 'pink', 'orange', 'lavender', 'blue', 'fuschia'];
+
 export default function RecommendationsPage({ recommendations, onNext, onPrev }: RecommendationsPageProps) {
+  const [colors, setColors] = useState<{ heading: string; back: string; next: string; sparkles: string[] }>({
+    heading: 'purple',
+    back: 'tan',
+    next: 'green',
+    sparkles: []
+  });
+
+  useEffect(() => {
+    const randomColors = {
+      heading: availableColors[Math.floor(Math.random() * availableColors.length)] || 'purple',
+      back: availableColors[Math.floor(Math.random() * availableColors.length)] || 'orange',
+      next: availableColors[Math.floor(Math.random() * availableColors.length)] || 'blue',
+      sparkles: recommendations.map(() => availableColors[Math.floor(Math.random() * availableColors.length)] || 'pink')
+    };
+    setColors(randomColors);
+  }, [recommendations]);
+
   return (
     <div className="min-h-screen bg-main flex flex-col items-center justify-center p-4">
       <motion.div
@@ -24,33 +44,31 @@ export default function RecommendationsPage({ recommendations, onNext, onPrev }:
           transition={{ delay: 0.2 }}
           className="mb-8"
         >
-          <h1 className="text-5xl font-bold text-primary mb-4">
+          <h1 className={`text-5xl font-bold text-${colors.heading} mb-4`}>
             Keep the Play Going
           </h1>
           <p className="text-xl text-primary/70">Your next playful adventures</p>
         </motion.div>
 
-        {/* Recommendations Card */}
+        {/* Recommendations Content */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-lavender rounded-3xl p-8 mb-8 shadow-lg"
+          className="space-y-6 mb-12"
         >
-          <div className="space-y-4">
-            {recommendations.map((rec, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6 + index * 0.2 }}
-                className="flex items-start gap-4"
-              >
-                <span className="text-2xl">✨</span>
-                <p className="text-primary text-lg text-left">{rec}</p>
-              </motion.div>
-            ))}
-          </div>
+          {recommendations.map((rec, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.6 + index * 0.2 }}
+              className="flex items-start gap-4 justify-center"
+            >
+              <span className={`text-2xl text-${colors.sparkles[index] || 'primary'}`}>✨</span>
+              <p className="text-primary text-lg text-center">{rec}</p>
+            </motion.div>
+          ))}
         </motion.div>
 
         {/* Navigation */}
@@ -58,24 +76,20 @@ export default function RecommendationsPage({ recommendations, onNext, onPrev }:
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
-          className="flex gap-4"
+          className="flex gap-8"
         >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <button
             onClick={onPrev}
-            className="bg-tan text-primary px-6 py-3 rounded-full font-semibold text-lg"
+            className={`text-${colors.back} text-xl font-semibold hover:opacity-70 transition-opacity`}
           >
             ← Back
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          </button>
+          <button
             onClick={onNext}
-            className="bg-green text-primary px-6 py-3 rounded-full font-semibold text-lg"
+            className={`text-${colors.next} text-xl font-semibold hover:opacity-70 transition-opacity`}
           >
             Fun Fact →
-          </motion.button>
+          </button>
         </motion.div>
       </motion.div>
     </div>

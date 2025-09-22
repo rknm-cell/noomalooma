@@ -21,6 +21,7 @@ export default function LogPage() {
   const [currentStep, setCurrentStep] = useState<'text' | 'emoji' | 'color' | 'confirmation'>('text');
   const [loggedMoment, setLoggedMoment] = useState<PlayMoment | null>(null);
   const [isDragOverDropZone, setIsDragOverDropZone] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const emojis = useMemo(() => ['😊', '🤪', '😌', '✨', '🎉', '🎨', '🎭', '🎪'], []);
   const colors = useMemo(() => ['bg-green', 'bg-purple', 'bg-pink', 'bg-orange', 'bg-lavender', 'bg-blue', 'bg-fuschia', 'bg-tan'], []);
@@ -183,6 +184,8 @@ export default function LogPage() {
             setIsDragOverDropZone={setIsDragOverDropZone}
             onEmojiSelect={handleEmojiSelect}
             prompt={emojiPrompt}
+            isDragging={isDragging}
+            setIsDragging={setIsDragging}
           />
         )}
 

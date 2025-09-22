@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 
 interface Pattern {
   title: string;
@@ -14,7 +15,26 @@ interface StatsPageProps {
   onPrev: () => void;
 }
 
+const availableColors = ['purple', 'pink', 'orange', 'lavender', 'blue', 'fuschia'];
+
 export default function StatsPage({ patterns, onNext, onPrev }: StatsPageProps) {
+  const [colors, setColors] = useState<{ heading: string; back: string; next: string; patternTitles: string[] }>({
+    heading: 'purple',
+    back: 'tan',
+    next: 'green',
+    patternTitles: []
+  });
+
+  useEffect(() => {
+    const randomColors = {
+      heading: availableColors[Math.floor(Math.random() * availableColors.length)] || 'purple',
+      back: availableColors[Math.floor(Math.random() * availableColors.length)] || 'orange',
+      next: availableColors[Math.floor(Math.random() * availableColors.length)] || 'blue',
+      patternTitles: patterns.map(() => availableColors[Math.floor(Math.random() * availableColors.length)] || 'pink')
+    };
+    setColors(randomColors);
+  }, [patterns]);
+
   return (
     <div className="min-h-screen bg-main flex flex-col items-center justify-center p-4">
       <motion.div
@@ -30,18 +50,18 @@ export default function StatsPage({ patterns, onNext, onPrev }: StatsPageProps) 
           transition={{ delay: 0.2 }}
           className="mb-8"
         >
-          <h1 className="text-5xl font-bold text-primary mb-4">
+          <h1 className={`text-5xl font-bold text-${colors.heading} mb-4`}>
             Your Stats
           </h1>
           <p className="text-xl text-primary/70">The numbers behind your play</p>
         </motion.div>
 
-        {/* Stats Cards */}
+        {/* Stats Content */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="space-y-6 mb-8"
+          className="space-y-8 mb-12"
         >
           {patterns.map((pattern, index) => (
             <motion.div
@@ -49,11 +69,11 @@ export default function StatsPage({ patterns, onNext, onPrev }: StatsPageProps) 
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.6 + index * 0.2 }}
-              className="bg-orange rounded-2xl p-6 shadow-lg"
+              className="text-center"
             >
-              <div className="flex items-center gap-4 mb-3">
+              <div className="flex items-center justify-center gap-4 mb-3">
                 <span className="text-4xl">{pattern.emoji}</span>
-                <h3 className="text-2xl font-bold text-primary">{pattern.title}</h3>
+                <h3 className={`text-2xl font-bold text-${colors.patternTitles[index] || 'primary'}`}>{pattern.title}</h3>
               </div>
               <p className="text-primary text-lg">{pattern.description}</p>
             </motion.div>
@@ -65,24 +85,20 @@ export default function StatsPage({ patterns, onNext, onPrev }: StatsPageProps) 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
-          className="flex gap-4"
+          className="flex gap-8"
         >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <button
             onClick={onPrev}
-            className="bg-tan text-primary px-6 py-3 rounded-full font-semibold text-lg"
+            className={`text-${colors.back} text-xl font-semibold hover:opacity-70 transition-opacity`}
           >
             ← Back
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          </button>
+          <button
             onClick={onNext}
-            className="bg-green text-primary px-6 py-3 rounded-full font-semibold text-lg"
+            className={`text-${colors.next} text-xl font-semibold hover:opacity-70 transition-opacity`}
           >
             Keep Playing →
-          </motion.button>
+          </button>
         </motion.div>
       </motion.div>
     </div>

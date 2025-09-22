@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 
 interface FunFactPageProps {
   funFact: string;
@@ -8,7 +9,26 @@ interface FunFactPageProps {
   onComplete: () => void;
 }
 
+const availableColors = ['purple', 'pink', 'orange', 'lavender', 'blue', 'fuschia'];
+
 export default function FunFactPage({ funFact, onPrev, onComplete }: FunFactPageProps) {
+  const [colors, setColors] = useState<{ heading: string; emoji: string; back: string; complete: string }>({
+    heading: 'purple',
+    emoji: 'primary',
+    back: 'tan',
+    complete: 'fuschia'
+  });
+
+  useEffect(() => {
+    const randomColors = {
+      heading: availableColors[Math.floor(Math.random() * availableColors.length)] || 'purple',
+      emoji: availableColors[Math.floor(Math.random() * availableColors.length)] || 'pink',
+      back: availableColors[Math.floor(Math.random() * availableColors.length)] || 'orange',
+      complete: availableColors[Math.floor(Math.random() * availableColors.length)] || 'blue'
+    };
+    setColors(randomColors);
+  }, []);
+
   return (
     <div className="min-h-screen bg-main flex flex-col items-center justify-center p-4">
       <motion.div
@@ -24,24 +44,24 @@ export default function FunFactPage({ funFact, onPrev, onComplete }: FunFactPage
           transition={{ delay: 0.2 }}
           className="mb-8"
         >
-          <h1 className="text-5xl font-bold text-primary mb-4">
+          <h1 className={`text-5xl font-bold text-${colors.heading} mb-4`}>
             Did You Know?
           </h1>
           <p className="text-xl text-primary/70">A surprising fact about your play</p>
         </motion.div>
 
-        {/* Fun Fact Card */}
+        {/* Fun Fact Content */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-blue rounded-3xl p-8 mb-8 shadow-lg"
+          className="mb-12"
         >
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.6, type: "spring", stiffness: 200 }}
-            className="text-6xl mb-6"
+            className={`text-6xl mb-6 text-${colors.emoji}`}
           >
             🤯
           </motion.div>
@@ -53,24 +73,20 @@ export default function FunFactPage({ funFact, onPrev, onComplete }: FunFactPage
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
-          className="flex gap-4"
+          className="flex gap-8"
         >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <button
             onClick={onPrev}
-            className="bg-tan text-primary px-6 py-3 rounded-full font-semibold text-lg"
+            className={`text-${colors.back} text-xl font-semibold hover:opacity-70 transition-opacity`}
           >
             ← Back
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          </button>
+          <button
             onClick={onComplete}
-            className="bg-fuschia text-primary px-6 py-3 rounded-full font-semibold text-lg"
+            className={`text-${colors.complete} text-xl font-semibold hover:opacity-70 transition-opacity`}
           >
             Complete! 🎉
-          </motion.button>
+          </button>
         </motion.div>
       </motion.div>
     </div>

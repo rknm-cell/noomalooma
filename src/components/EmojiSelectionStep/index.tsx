@@ -14,6 +14,8 @@ interface EmojiSelectionStepProps {
   setIsDragOverDropZone: (isOver: boolean) => void;
   onEmojiSelect: (emoji: string) => void;
   prompt: string;
+  isDragging: boolean;
+  setIsDragging: (dragging: boolean) => void;
 }
 
 export default function EmojiSelectionStep({
@@ -24,7 +26,9 @@ export default function EmojiSelectionStep({
   isDragOverDropZone,
   setIsDragOverDropZone,
   onEmojiSelect,
-  prompt
+  prompt,
+  isDragging,
+  setIsDragging
 }: EmojiSelectionStepProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -54,7 +58,7 @@ export default function EmojiSelectionStep({
       {/* Physics-based bouncing emojis */}
       <div 
         ref={containerRef}
-        className="fixed inset-0 w-full h-full pointer-events-none border border-red-500 z-20"
+        className="fixed inset-0 w-full h-full pointer-events-none z-20"
       >
         {bouncingEmojis.map((emoji) => (
           <BouncingEmoji
@@ -65,6 +69,8 @@ export default function EmojiSelectionStep({
             onEmojiSelect={onEmojiSelect}
             setBouncingEmojis={setBouncingEmojis}
             setIsDragOverDropZone={setIsDragOverDropZone}
+            isDragging={isDragging}
+            setIsDragging={setIsDragging}
           />
         ))}
       </div>

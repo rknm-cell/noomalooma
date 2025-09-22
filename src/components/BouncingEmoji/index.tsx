@@ -1,6 +1,7 @@
 'use client';
 
 import { motion, type PanInfo } from 'framer-motion';
+import { useRef, useEffect, useState } from 'react';
 import type { BouncingEmoji as BouncingEmojiType } from '../../types/bouncingEmoji';
 
 interface BouncingEmojiProps {
@@ -10,6 +11,8 @@ interface BouncingEmojiProps {
   onEmojiSelect: (emoji: string) => void;
   setBouncingEmojis: React.Dispatch<React.SetStateAction<BouncingEmojiType[]>>;
   setIsDragOverDropZone: (isOver: boolean) => void;
+  isDragging: boolean;
+  setIsDragging: (dragging: boolean) => void;
 }
 
 export default function BouncingEmoji({ 
@@ -18,9 +21,24 @@ export default function BouncingEmoji({
   selectedColor, 
   onEmojiSelect, 
   setBouncingEmojis,
-  setIsDragOverDropZone 
+  setIsDragOverDropZone,
+  isDragging,
+  setIsDragging
 }: BouncingEmojiProps) {
+  const dragConstraintsRef = useRef<HTMLDivElement>(null);
+
+  const handleDragStart = () => {
+    setIsDragging(true);
+    // Stop physics for this emoji while dragging
+    setBouncingEmojis(prev => prev.map(e => 
+      e.id === emoji.id 
+        ? { ...e, vx: 0, vy: 0 }
+        : e
+    ));
+  };
+
   const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
+    setIsDragging(false);
     setIsDragOverDropZone(false); // Reset drag over state
     
     if (info) {
@@ -89,38 +107,36 @@ export default function BouncingEmoji({
   };
 
   return (
-    <motion.button
-      className={`absolute text-4xl cursor-grab pointer-events-auto z-10 ${
-        selectedEmoji === emoji.emoji ? `${selectedColor} rounded-full p-2` : ''
-      }`}
-      onDragEnd={handleDragEnd}
-      animate={{
-        x: emoji.x,
-        y: emoji.y,
-        width: emoji.size,
-        height: emoji.size,
-      }}
-      drag
-      dragConstraints={{
-        left: 0,
-        right: window.innerWidth - emoji.size,
-        top: 0,
-        bottom: window.innerHeight - emoji.size,
-      }}
-      dragElastic={0.1}
-      dragMomentum={false}
-      onDrag={handleDrag}
-      whileHover={{ 
-        scale: 1.2,
-        transition: { duration: 0.2 }
-      }}
-      whileTap={{ scale: 0.8 }}
-      whileDrag={{ 
-        scale: 1.1,
-        cursor: 'grabbing'
-      }}
-    >
-      {emoji.emoji}
-    </motion.button>
+    <div ref={dragConstraintsRef} className="fixed inset-0 pointer-events-none">
+      <motion.button
+        className={`absolute text-4xl cursor-grab pointer-events-auto z-10 ${
+          selectedEmoji === emoji.emoji ? `${selectedColor} rounded-full p-2` : ''
+        }`}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+        style={{
+          left: emoji.x,
+          top: emoji.y,
+          width: emoji.size,
+          height: emoji.size,
+        }}
+        drag
+        dragConstraints={dragConstraintsRef}
+        dragElastic={0}
+        dragMomentum={false}
+        onDrag={handleDrag}
+        whileHover={{ 
+          scale: 1.2,
+          transition: { duration: 0.2 }
+        }}
+        whileTap={{ scale: 0.8 }}
+        whileDrag={{ 
+          scale: 1.1,
+          cursor: 'grabbing'
+        }}
+      >
+        {emoji.emoji}
+      </motion.button>
+    </div>
   );
 }
