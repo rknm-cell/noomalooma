@@ -2,7 +2,16 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import ProgressIndicator from '~/components/ProgressIndicator';
 import { type PlayMoment } from '~/types/playMoment';
+import SummaryPage from '~/components/analysis/SummaryPage';
+import PersonalityPage from '~/components/analysis/PersonalityPage';
+import StatsPage from '~/components/analysis/StatsPage';
+import RecommendationsPage from '~/components/analysis/RecommendationsPage';
+import FunFactPage from '~/components/analysis/FunFactPage';
 
 interface AnalysisInsights {
   summary: string;
@@ -35,10 +44,14 @@ interface StoredPlayMoment {
   tags: string[];
 }
 
+type AnalysisStep = 'loading' | 'summary' | 'personality' | 'stats' | 'recommendations' | 'funfact' | 'complete';
+
 export default function AnalysisPage() {
+  const router = useRouter();
   const [insights, setInsights] = useState<AnalysisInsights | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentStep, setCurrentStep] = useState<AnalysisStep>('loading');
 
   useEffect(() => {
     const analyzeWeek = async () => {
@@ -73,6 +86,7 @@ export default function AnalysisPage() {
         const data = await response.json() as ApiResponse;
         if (data.insights) {
           setInsights(data.insights);
+          setCurrentStep('summary');
         } else {
           throw new Error('No insights received from server');
         }
@@ -86,7 +100,98 @@ export default function AnalysisPage() {
     void analyzeWeek();
   }, []);
 
-  if (loading) {
+  const nextStep = () => {
+    switch (currentStep) {
+      case 'summary':
+        setCurrentStep('personality');
+        break;
+      case 'personality':
+        setCurrentStep('stats');
+        break;
+      case 'stats':
+        setCurrentStep('recommendations');
+        break;
+      case 'recommendations':
+        setCurrentStep('funfact');
+        break;
+      case 'funfact':
+        setCurrentStep('complete');
+        break;
+    }
+  };
+
+  const prevStep = () => {
+    switch (currentStep) {
+      case 'personality':
+        setCurrentStep('summary');
+        break;
+      case 'stats':
+        setCurrentStep('personality');
+        break;
+      case 'recommendations':
+        setCurrentStep('stats');
+        break;
+      case 'funfact':
+        setCurrentStep('recommendations');
+        break;
+    }
+  };
+
+  const completeAnalysis = () => {
+    setCurrentStep('complete');
+  };
+
+  const handleBack = () => {
+    if (currentStep === 'summary') {
+      router.push('/');
+    } else if (currentStep === 'personality') {
+      setCurrentStep('summary');
+    } else if (currentStep === 'stats') {
+      setCurrentStep('personality');
+    } else if (currentStep === 'recommendations') {
+      setCurrentStep('stats');
+    } else if (currentStep === 'funfact') {
+      setCurrentStep('recommendations');
+    } else if (currentStep === 'complete') {
+      setCurrentStep('funfact');
+    }
+  };
+
+  const renderAnalysisStep = (stepComponent: React.ReactNode) => {
+    return (
+      <main className="min-h-screen flex flex-col">
+        {/* Top Navigation - Fixed at top */}
+        <div className="w-full flex items-center justify-between p-4 pt-6">
+          {/* Back Button */}
+          <button
+            onClick={handleBack}
+            className="w-10 h-10 rounded-full flex items-center justify-center"
+          >
+            <Image 
+              src="/arrow_left.png" 
+              alt="back" 
+              width={20} 
+              height={20}
+              className="opacity-70"
+            />
+          </button>
+
+          {/* Progress Indicator */}
+          <ProgressIndicator currentStep={currentStep} totalSteps={6} />
+
+          {/* Spacer for balance */}
+          <div className="w-10"></div>
+        </div>
+
+        {/* Main Content - Top Aligned */}
+        <div className="flex-1 flex flex-col items-center justify-start p-4 pt-8">
+          {stepComponent}
+        </div>
+      </main>
+    );
+  };
+
+  if (loading || currentStep === 'loading') {
     return (
       <div className="min-h-screen bg-main flex items-center justify-center p-4">
         <motion.div
@@ -135,135 +240,69 @@ export default function AnalysisPage() {
     return null;
   }
 
-  return (
-    <div className="min-h-screen bg-main p-4">
-      <div className="max-w-2xl mx-auto">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-8"
-        >
-          <h1 className="text-4xl font-bold text-primary mb-2">
-            Your Play Week Analysis
-          </h1>
-          <p className="text-lg text-primary/70">Discover your playful patterns</p>
-        </motion.div>
-
-        {/* Summary */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-white rounded-2xl p-6 mb-6 shadow-sm"
-        >
-          <h2 className="text-2xl font-bold text-purple mb-3">Week Summary</h2>
-          <p className="text-primary text-lg leading-relaxed">{insights.summary}</p>
-        </motion.div>
-
-        {/* Personality */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-pink rounded-2xl p-6 mb-6"
-        >
-          <div className="flex items-center gap-3 mb-3">
-            <span className="text-3xl">{insights.personality.emoji}</span>
-            <h2 className="text-2xl font-bold text-primary">{insights.personality.title}</h2>
-          </div>
-          <p className="text-primary text-lg leading-relaxed">{insights.personality.description}</p>
-        </motion.div>
-
-        {/* Patterns */}
-        {insights.patterns.length > 0 && (
+  // Render different pages based on current step
+  switch (currentStep) {
+    case 'summary':
+      return renderAnalysisStep(<SummaryPage summary={insights.summary} onNext={nextStep} />);
+    
+    case 'personality':
+      return renderAnalysisStep(
+        <PersonalityPage 
+          personality={insights.personality} 
+          onNext={nextStep} 
+          onPrev={prevStep} 
+        />
+      );
+    
+    case 'stats':
+      return renderAnalysisStep(
+        <StatsPage 
+          patterns={insights.patterns} 
+          onNext={nextStep} 
+          onPrev={prevStep} 
+        />
+      );
+    
+    case 'recommendations':
+      return renderAnalysisStep(
+        <RecommendationsPage 
+          recommendations={insights.recommendations} 
+          onNext={nextStep} 
+          onPrev={prevStep} 
+        />
+      );
+    
+    case 'funfact':
+      return renderAnalysisStep(
+        <FunFactPage 
+          funFact={insights.funFact} 
+          onPrev={prevStep} 
+          onComplete={completeAnalysis} 
+        />
+      );
+    
+    case 'complete':
+      return (
+        <div className="min-h-screen bg-main flex items-center justify-center p-4">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="mb-6"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="text-center"
           >
-            <h2 className="text-2xl font-bold text-primary mb-4">Play Patterns</h2>
-            <div className="space-y-4">
-              {insights.patterns.map((pattern, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4 + index * 0.1 }}
-                  className="bg-orange rounded-xl p-4"
-                >
-                  <div className="flex items-center gap-3 mb-2">
-                    <span className="text-2xl">{pattern.emoji}</span>
-                    <h3 className="text-xl font-semibold text-primary">{pattern.title}</h3>
-                  </div>
-                  <p className="text-primary">{pattern.description}</p>
-                </motion.div>
-              ))}
-            </div>
+            <div className="text-6xl mb-4">🎉</div>
+            <h1 className="text-3xl font-bold text-primary mb-4">Your Play Story Complete!</h1>
+            <p className="text-lg text-primary mb-6">Thanks for exploring your playful side!</p>
+            <Link
+              href="/"
+              className="text-green text-xl font-semibold hover:opacity-70 transition-opacity"
+            >
+              Back to Play
+            </Link>
           </motion.div>
-        )}
-
-        {/* Recommendations */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="bg-lavender rounded-2xl p-6 mb-6"
-        >
-          <h2 className="text-2xl font-bold text-primary mb-4">Play Recommendations</h2>
-          <ul className="space-y-2">
-            {insights.recommendations.map((rec, index) => (
-              <motion.li
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.6 + index * 0.1 }}
-                className="flex items-start gap-3"
-              >
-                <span className="text-lg">✨</span>
-                <span className="text-primary">{rec}</span>
-              </motion.li>
-            ))}
-          </ul>
-        </motion.div>
-
-        {/* Fun Fact */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.7 }}
-          className="bg-blue rounded-2xl p-6 mb-8"
-        >
-          <h2 className="text-2xl font-bold text-primary mb-3">Fun Fact</h2>
-          <p className="text-primary text-lg leading-relaxed">{insights.funFact}</p>
-        </motion.div>
-
-        {/* Navigation */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-          className="flex gap-4 justify-center"
-        >
-          <motion.a
-            href="/"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-green text-primary px-6 py-3 rounded-full font-semibold"
-          >
-            Back to Play
-          </motion.a>
-          <motion.a
-            href="/log"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-fuschia text-primary px-6 py-3 rounded-full font-semibold"
-          >
-            Log More Play
-          </motion.a>
-        </motion.div>
-      </div>
-    </div>
-  );
+        </div>
+      );
+    
+    default:
+      return null;
+  }
 }

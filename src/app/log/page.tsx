@@ -3,25 +3,46 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import type { PlayMoment } from '../../types/playMoment';
 import { useBouncingEmojis } from '../../hooks/useBouncingEmojis';
+import { useLoggingPrompts } from '../../hooks/useLoggingPrompts';
 import TextInputStep from '../../components/TextInputStep';
 import EmojiSelectionStep from '../../components/EmojiSelectionStep';
 import ColorSelectionStep from '../../components/ColorSelectionStep';
+import LogConfirmation from '../../components/LogConfirmation';
+import ProgressIndicator from '../../components/ProgressIndicator';
 
 export default function LogPage() {
   const router = useRouter();
   const [text, setText] = useState('');
   const [selectedEmoji, setSelectedEmoji] = useState<string>('😊');
   const [selectedColor, setSelectedColor] = useState<string>('bg-green');
-  const [currentStep, setCurrentStep] = useState<'text' | 'emoji' | 'color'>('text');
+  const [currentStep, setCurrentStep] = useState<'text' | 'emoji' | 'color' | 'confirmation'>('text');
+  const [loggedMoment, setLoggedMoment] = useState<PlayMoment | null>(null);
   const [isDragOverDropZone, setIsDragOverDropZone] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
 
   const emojis = useMemo(() => ['😊', '🤪', '😌', '✨', '🎉', '🎨', '🎭', '🎪'], []);
   const colors = useMemo(() => ['bg-green', 'bg-purple', 'bg-pink', 'bg-orange', 'bg-lavender', 'bg-blue', 'bg-fuschia', 'bg-tan'], []);
+  
+  // Emoji to mood mapping
+  const emojiToMood = useMemo(() => ({
+    '😊': 'Happy',
+    '🤪': 'Silly', 
+    '😌': 'Peaceful',
+    '✨': 'Magical',
+    '🎉': 'Celebratory',
+    '🎨': 'Creative',
+    '🎭': 'Dramatic',
+    '🎪': 'Adventurous'
+  }), []);
 
   // Use bouncing emojis hook
   const { bouncingEmojis, setBouncingEmojis } = useBouncingEmojis();
+  
+  // Use dynamic prompts
+  const { textPrompt, emojiPrompt, colorPrompt } = useLoggingPrompts();
 
   // Randomize initial selections
   useEffect(() => {
@@ -49,8 +70,8 @@ export default function LogPage() {
       timestamp: new Date(),
       text,
       emoji: selectedEmoji,
-      color: selectedColor,
-      mood: 'Playful',
+      color: color, // Use the selected color parameter, not the state
+      mood: emojiToMood[selectedEmoji as keyof typeof emojiToMood] || 'Playful',
       tags: []
     };
     
@@ -59,32 +80,84 @@ export default function LogPage() {
     existingMoments.push(moment);
     localStorage.setItem('noomalooma-play-moments', JSON.stringify(existingMoments));
     
-    // Navigate back to home
+    // Show confirmation step
+    setLoggedMoment(moment);
+    setCurrentStep('confirmation');
+  };
+
+  const handleContinue = () => {
     router.push('/');
   };
 
   const handleBack = () => {
-    router.push('/');
+    if (currentStep === 'text') {
+      // If on text step, go back to home
+      router.push('/');
+    } else if (currentStep === 'emoji') {
+      // Go back to text step
+      setCurrentStep('text');
+    } else if (currentStep === 'color') {
+      // Go back to emoji step
+      setCurrentStep('emoji');
+    } else if (currentStep === 'confirmation') {
+      // Go back to color step
+      setCurrentStep('color');
+    }
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-4 border border-red-500">
+    <main className="min-h-screen flex flex-col">
+      {/* Top Navigation - Fixed at top */}
       <motion.div
-        id="main-card"
-        className={`${selectedColor} rounded-3xl p-8 w-full max-w-sm relative border border-red-500`}
-        initial={{ scale: 0.7, opacity: 0, rotate: -5 }}
-        animate={{ scale: 1, opacity: 1, rotate: [0, 2, -1, 0] }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="w-full flex items-center justify-between p-4 pt-6"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
       >
-        {/* Back button */}
+        {/* Back Button */}
         <motion.button
           onClick={handleBack}
-          className="absolute -top-4 -left-4 bg-gray-100 text-gray-600 w-8 h-8 rounded-full flex items-center justify-center font-jakarta border border-red-500"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
+          className="w-10 h-10 rounded-full flex items-center justify-center"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
-          ←
+          <Image 
+            src="/arrow_left.png" 
+            alt="back" 
+            width={20} 
+            height={20}
+            className="opacity-70"
+          />
         </motion.button>
+
+        {/* Progress Indicator */}
+        <ProgressIndicator currentStep={currentStep} totalSteps={4} />
+
+        {/* Spacer for balance */}
+        <div className="w-10"></div>
+      </motion.div>
+
+      {/* Main Content - Top Aligned */}
+      <div className="flex-1 flex flex-col items-center justify-start p-4 pt-8">
+
+      {/* Text Prompt - above the main card */}
+      {currentStep === 'text' && (
+        <motion.div
+          className="w-full max-w-sm px-8 mb-8"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <h2 className="text-2xl font-light font-schoolbell text-primary text-center leading-relaxed">
+            {textPrompt}
+          </h2>
+        </motion.div>
+      )}
+      
+      <div
+        id="main-card"
+        className="w-full max-w-sm relative"
+      >
 
         {/* Step 1: Text Input */}
         {currentStep === 'text' && (
@@ -93,6 +166,7 @@ export default function LogPage() {
             setText={setText}
             onNext={handleTextSubmit}
             selectedColor={selectedColor}
+            prompt={textPrompt}
           />
         )}
 
@@ -106,6 +180,9 @@ export default function LogPage() {
             isDragOverDropZone={isDragOverDropZone}
             setIsDragOverDropZone={setIsDragOverDropZone}
             onEmojiSelect={handleEmojiSelect}
+            prompt={emojiPrompt}
+            isDragging={isDragging}
+            setIsDragging={setIsDragging}
           />
         )}
 
@@ -115,9 +192,19 @@ export default function LogPage() {
             colors={colors}
             selectedColor={selectedColor}
             onColorSelect={handleColorSelect}
+            prompt={colorPrompt}
           />
         )}
-      </motion.div>
+
+        {/* Step 4: Confirmation */}
+        {currentStep === 'confirmation' && loggedMoment && (
+          <LogConfirmation
+            moment={loggedMoment}
+            onContinue={handleContinue}
+          />
+        )}
+      </div>
+      </div>
     </main>
   );
 }

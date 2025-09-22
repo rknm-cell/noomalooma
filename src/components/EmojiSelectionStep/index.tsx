@@ -13,6 +13,9 @@ interface EmojiSelectionStepProps {
   isDragOverDropZone: boolean;
   setIsDragOverDropZone: (isOver: boolean) => void;
   onEmojiSelect: (emoji: string) => void;
+  prompt: string;
+  isDragging: boolean;
+  setIsDragging: (dragging: boolean) => void;
 }
 
 export default function EmojiSelectionStep({
@@ -22,21 +25,19 @@ export default function EmojiSelectionStep({
   selectedColor,
   isDragOverDropZone,
   setIsDragOverDropZone,
-  onEmojiSelect
+  onEmojiSelect,
+  prompt,
+  isDragging,
+  setIsDragging
 }: EmojiSelectionStepProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   return (
     <>
-      <motion.div
-        className="w-full text-center"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        <h3 className="text-xl font-light font-jakarta text-primary mb-6">how did it feel?</h3>
+      <div className="w-full text-center flex flex-col items-center justify-start">
+        <h3 className="text-xl font-light font-schoolbell text-primary mb-6">{prompt}</h3>
         <p className="text-sm font-light font-jakarta text-gray-600 mb-4">drag an emoji into this box to select</p>
-        <div className={`w-full h-20 border-2 border-dashed rounded-xl flex items-center justify-center transition-colors ${
+        <div className={`w-full h-20 border-2 border-dashed rounded-xl flex items-start justify-center pt-4 transition-colors ${
           isDragOverDropZone 
             ? 'border-green-500 bg-green-50' 
             : 'border-gray-300 bg-gray-50'
@@ -47,12 +48,12 @@ export default function EmojiSelectionStep({
             {isDragOverDropZone ? 'drop here!' : 'drop zone'}
           </span>
         </div>
-      </motion.div>
+      </div>
 
       {/* Physics-based bouncing emojis */}
       <div 
         ref={containerRef}
-        className="fixed inset-0 w-full h-full pointer-events-none border border-red-500 z-20"
+        className="fixed inset-0 w-full h-full pointer-events-none z-20"
       >
         {bouncingEmojis.map((emoji) => (
           <BouncingEmoji
@@ -63,6 +64,8 @@ export default function EmojiSelectionStep({
             onEmojiSelect={onEmojiSelect}
             setBouncingEmojis={setBouncingEmojis}
             setIsDragOverDropZone={setIsDragOverDropZone}
+            isDragging={isDragging}
+            setIsDragging={setIsDragging}
           />
         ))}
       </div>
