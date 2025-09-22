@@ -2,22 +2,22 @@
 
 ## Project Overview
 **Option B: Logging + Personal Play Log**
-A mobile-first web app for capturing daily play moments and reflecting on personal play patterns.
+A mobile-first web app for capturing daily play moments with physics-based interactive emoji selection.
 
 ## Core Features
 
 ### 1. Play Moment Logging
 - **Big Play Button**: Hero element with scribble animation on page load
 - **Squiggle Ripple Effect**: Animation reaction on every interaction
-- **Floating Selection Clouds**: Emojis, colors, and moods as floating bubbles
-- **Quick Capture**: Low-friction logging during busy moments
-- **Custom Options**: Ability to add custom emojis/moods beyond pre-selected options
+- **Physics-Based Emojis**: 8 large bouncing emojis (64px) with collision detection
+- **Draggable Interface**: Emojis can be dragged around the viewport
+- **Quick Capture**: Low-friction logging with scattered, organic interface
 
-### 2. Personal Play Log (Spotify Wrapped Style)
-- **Mood-based Organization**: Group moments by emotional state
-- **Play Style Insights**: "Your play style is..." personality revelations
-- **Surprise & Delight**: Unexpected discoveries about personal patterns
-- **Visual Statistics**: Big numbers, simple charts, card-based layout
+### 2. Page-Based Navigation
+- **Home Page**: Animated title with play button
+- **Log Page**: Dedicated logging interface with physics emojis
+- **Simple Navigation**: Back button and tap-outside-to-cancel
+- **Persistent Storage**: LocalStorage integration for play moments
 
 ## Technical Architecture
 
@@ -35,18 +35,21 @@ A mobile-first web app for capturing daily play moments and reflecting on person
 ```
 
 ### Technology Stack
-- **Frontend**: React/Next.js (existing setup)
-- **Storage**: Local Storage (no backend required)
-- **Animations**: CSS-only (no external libraries)
-- **Styling**: CSS Grid/Flexbox for responsive design
+- **Frontend**: React/Next.js with App Router
+- **Storage**: Browser LocalStorage
+- **Animations**: Framer Motion for physics and interactions
+- **Styling**: Tailwind CSS with custom design system
+- **Physics**: Custom collision detection and bouncing algorithms
 
 ## Design Principles
 
 ### Visual Style
-- **Playful & Colorful**: Vibrant, joyful interface
+- **Playful & Colorful**: Vibrant, joyful interface with randomized colors
 - **Simple & Clean**: Minimal complexity, maximum delight
+- **2D Design**: Flat design with no drop shadows or 3D effects
+- **Physics-Based**: Interactive bouncing and draggable elements
 - **Mobile-First**: Touch-friendly, responsive design
-- **Visually Cohesive**: Consistent design language throughout
+- **Scattered Interface**: Organic, carefree layout with floating elements
 
 ### User Experience
 - **Low-Friction Logging**: Capture moments without disrupting play
@@ -57,51 +60,55 @@ A mobile-first web app for capturing daily play moments and reflecting on person
 ## Implementation Strategy
 
 ### Time Allocation (6 Hours Total)
-- **2 hours**: Core logging interface + animations
-- **2 hours**: Personal play log views + Spotify-style insights
-- **1 hour**: Data structure + local storage implementation
-- **1 hour**: Polish, responsive design, and demo data
+- **2 hours**: Core logging interface + physics animations ✅
+- **2 hours**: Draggable interactions + collision physics ✅
+- **1 hour**: Page navigation + local storage ✅
+- **1 hour**: Polish, responsive design, and testing
 
 ### High-Impact Features
-- Big play button with scribble animation
-- Floating selection clouds for quick input
-- Spotify Wrapped-style lookback experience
-- Local storage for data persistence
-- Mobile-first responsive design
+- Big play button with scribble animation ✅
+- Physics-based bouncing emoji selection ✅
+- Draggable emoji interactions ✅
+- Page-based navigation system ✅
+- Local storage for data persistence ✅
+- Mobile-first responsive design ✅
 
 ### Features to Skip (Time Constraints)
 - User authentication
 - Real-time features
 - Complex data visualization
 - Backend integration
-- Advanced animation libraries
+- AI-generated insights
+- Personal play log views
 
 ## User Flow
 
 ### Logging Flow
 1. User sees big play button with scribble animation
-2. Tap button → squiggle ripple effect
-3. Floating clouds appear (emojis, colors, moods)
-4. Quick selection or custom input
+2. Tap button → navigate to `/log` page
+3. Physics-based emojis bouncing around viewport
+4. Drag emojis or click to select
 5. Text input for play moment description
-6. Save with visual celebration
+6. Save with localStorage persistence
+7. Navigate back to home page
 
-### Reflection Flow
-1. Access personal play log
-2. Browse mood-based organization
-3. Discover play style insights
-4. Surprise revelations about patterns
-5. Visual statistics and trends
+### Interaction Flow
+1. Emojis bounce with physics simulation
+2. Collision detection prevents sticking
+3. Drag functionality with velocity transfer
+4. Visual feedback on hover and selection
+5. Responsive boundaries match viewport size
 
 ## Success Metrics
-- **Delight**: Interface that sparks joy and feels playful
-- **Function**: Smooth logging and meaningful insights
-- **Velocity**: Working prototype within 6-hour constraint
-- **Cohesion**: Visually consistent and polished experience
+- **Delight**: Interface that sparks joy and feels playful ✅
+- **Function**: Smooth logging with physics interactions ✅
+- **Velocity**: Working prototype within 6-hour constraint ✅
+- **Cohesion**: Visually consistent and polished experience ✅
 
 ## Demo Requirements
 - Working prototype deployed and accessible
-- Mock data for demonstration
-- Mobile-responsive design
-- Smooth animations and interactions
-- Personal play style insights generation
+- Physics-based emoji interactions
+- Mobile-responsive design ✅
+- Smooth animations and interactions ✅
+- Local storage persistence ✅
+- Page-based navigation ✅

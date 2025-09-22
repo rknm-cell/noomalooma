@@ -1,37 +1,99 @@
-import Link from "next/link";
+'use client';
+
+import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import PlayButton from '../components/PlayButton';
 
 export default function HomePage() {
+  const router = useRouter();
+  const letters = ['n', 'o', 'o', 'm', 'a', 'l', 'o', 'o', 'm', 'a'];
+  const colors = [
+    'var(--color-green)',
+    'var(--color-purple)',
+    'var(--color-pink)',
+    'var(--color-orange)',
+    'var(--color-lavender)',
+    'var(--color-blue)',
+    'var(--color-fuschia)',
+    'var(--color-tan)',
+    'var(--color-green)',
+    'var(--color-purple)',
+  ];
+
+  const [colorsState, setColorsState] = useState(colors);
+
+  const getRandomColor = (): string => {
+    return colors[Math.floor(Math.random() * colors.length)] ?? colors[0] ?? '';
+  };
+
+  const handleLetterHover = (index: number) => {
+    const newColors = [...colorsState];
+    newColors[index] = getRandomColor();
+    setColorsState(newColors);
+  };
+
+  const handlePlayButtonClick = () => {
+    router.push('/log');
+  };
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16">
-        <h1 className="text-5xl font-extrabold tracking-tight text-white sm:text-[5rem]">
-          Create <span className="text-[hsl(280,100%,70%)]">T3</span> App
-        </h1>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-8">
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-            href="https://create.t3.gg/en/usage/first-steps"
-            target="_blank"
+    <main className="flex min-h-screen flex-col items-center justify-start px-4 pt-8 sm:pt-16">
+      <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-2">
+        {letters.map((letter, index) => (
+          <motion.span
+            key={index}
+            className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black font-jakarta tracking-tight cursor-pointer"
+            style={{ color: colorsState[index] }}
+            initial={{ y: 0 }}
+            animate={{ 
+              y: [0, -20, 0],
+            }}
+            transition={{
+              duration: 0.6,
+              delay: index * 0.1,
+              ease: "easeOut",
+              // Default transition for hover exit
+              y: { duration: 0.5, ease: "easeOut" }
+            }}
+            whileHover={{ 
+              y: -15,
+              // Transition for hover enter
+              transition: { duration: 0.2, ease: "easeOut" }
+            }}
+              onHoverStart={() => handleLetterHover(index)}
+            whileTap={{ 
+              scale: 0.9,
+              transition: { duration: 0.1 }
+            }}
           >
-            <h3 className="text-2xl font-bold">First Steps →</h3>
-            <div className="text-lg">
-              Just the basics - Everything you need to know to set up your
-              database and authentication.
-            </div>
-          </Link>
-          <Link
-            className="flex max-w-xs flex-col gap-4 rounded-xl bg-white/10 p-4 text-white hover:bg-white/20"
-            href="https://create.t3.gg/en/introduction"
-            target="_blank"
-          >
-            <h3 className="text-2xl font-bold">Documentation →</h3>
-            <div className="text-lg">
-              Learn more about Create T3 App, the libraries it uses, and how to
-              deploy it.
-            </div>
-          </Link>
-        </div>
+            {letter}
+          </motion.span>
+        ))}
       </div>
+      
+      {/* Play Button Section */}
+      <div className="mt-16 sm:mt-20">
+        <PlayButton onClick={handlePlayButtonClick} />
+      </div>
+
+      {/* Analysis Link */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.5 }}
+        className="mt-8"
+      >
+        <motion.a
+          href="/analysis"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="inline-block bg-tan text-primary px-6 py-3 rounded-full font-semibold text-lg"
+        >
+          Analyze My Play Week 🎭
+        </motion.a>
+      </motion.div>
+
     </main>
   );
 }
