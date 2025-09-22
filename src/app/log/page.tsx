@@ -137,8 +137,8 @@ export default function LogPage() {
         <div className="w-10"></div>
       </motion.div>
 
-      {/* Main Content - Centered */}
-      <div className="flex-1 flex flex-col items-center justify-center p-4">
+      {/* Main Content - Top Aligned */}
+      <div className="flex-1 flex flex-col items-center justify-start p-4 pt-8">
 
       {/* Text Prompt - above the main card */}
       {currentStep === 'text' && (
@@ -154,12 +154,9 @@ export default function LogPage() {
         </motion.div>
       )}
       
-      <motion.div
+      <div
         id="main-card"
-        className={`${selectedColor} rounded-3xl p-8 w-full max-w-sm relative`}
-        initial={{ scale: 0.7, opacity: 0, rotate: -5 }}
-        animate={{ scale: 1, opacity: 1, rotate: [0, 2, -1, 0] }}
-        transition={{ duration: 0.4, ease: "easeOut", delay: 0.2 }}
+        className="w-full max-w-sm relative"
       >
 
         {/* Step 1: Text Input */}
@@ -206,7 +203,7 @@ export default function LogPage() {
             onContinue={handleContinue}
           />
         )}
-      </motion.div>
+      </div>
       </div>
     </main>
   );

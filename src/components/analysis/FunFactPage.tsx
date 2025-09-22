@@ -45,9 +45,9 @@ export default function FunFactPage({ funFact, onPrev, onComplete }: FunFactPage
           className="mb-8"
         >
           <h1 className={`text-5xl font-bold text-${colors.heading} mb-4`}>
-            Did You Know?
+            Something Special
           </h1>
-          <p className="text-xl text-primary/70">A surprising fact about your play</p>
+          <p className="text-xl text-primary/70">A delightful discovery about you</p>
         </motion.div>
 
         {/* Fun Fact Content */}
@@ -85,7 +85,7 @@ export default function FunFactPage({ funFact, onPrev, onComplete }: FunFactPage
             onClick={onComplete}
             className={`text-${colors.complete} text-xl font-semibold hover:opacity-70 transition-opacity`}
           >
-            Complete! 🎉
+            Wonderful! 🎉
           </button>
         </motion.div>
       </motion.div>

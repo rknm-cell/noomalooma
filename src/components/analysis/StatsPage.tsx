@@ -51,9 +51,9 @@ export default function StatsPage({ patterns, onNext, onPrev }: StatsPageProps) 
           className="mb-8"
         >
           <h1 className={`text-5xl font-bold text-${colors.heading} mb-4`}>
-            Your Stats
+            Your Play Patterns
           </h1>
-          <p className="text-xl text-primary/70">The numbers behind your play</p>
+          <p className="text-xl text-primary/70">What your moments reveal</p>
         </motion.div>
 
         {/* Stats Content */}
@@ -97,7 +97,7 @@ export default function StatsPage({ patterns, onNext, onPrev }: StatsPageProps) 
             onClick={onNext}
             className={`text-${colors.next} text-xl font-semibold hover:opacity-70 transition-opacity`}
           >
-            Keep Playing →
+            What's Next →
           </button>
         </motion.div>
       </motion.div>

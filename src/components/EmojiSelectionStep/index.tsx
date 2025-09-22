@@ -34,12 +34,7 @@ export default function EmojiSelectionStep({
 
   return (
     <>
-      <motion.div
-        className="w-full text-center"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
+      <div className="w-full text-center">
         <h3 className="text-xl font-light font-schoolbell text-primary mb-6">{prompt}</h3>
         <p className="text-sm font-light font-jakarta text-gray-600 mb-4">drag an emoji into this box to select</p>
         <div className={`w-full h-20 border-2 border-dashed rounded-xl flex items-center justify-center transition-colors ${
@@ -53,7 +48,7 @@ export default function EmojiSelectionStep({
             {isDragOverDropZone ? 'drop here!' : 'drop zone'}
           </span>
         </div>
-      </motion.div>
+      </div>
 
       {/* Physics-based bouncing emojis */}
       <div 

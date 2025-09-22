@@ -28,39 +28,19 @@ export default function LogConfirmation({ moment, onContinue }: LogConfirmationP
   };
 
   return (
-    <motion.div
-      className="w-full text-center"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
-      
-
-     
-        {/* Emoji and Text Pill */}
-        <motion.div
-          className={`${moment.color} rounded-full px-6 py-4 mb-4 flex items-center justify-center`}
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.3 }}
-        >
-          <div className="text-3xl mr-3">{moment.emoji}</div>
-          <p className="text-lg font-light font-jakarta text-primary leading-relaxed">
-            {moment.text}
-          </p>
-        </motion.div>
-        
-       
+    <div className="w-full text-center">
+      {/* Emoji and Text Pill */}
+      <div className={`${moment.color} rounded-full px-6 py-4 mb-8 flex items-center justify-center mx-auto max-w-md`}>
+        <div className="text-3xl mr-3">{moment.emoji}</div>
+        <p className="text-lg font-light font-jakarta text-primary leading-relaxed">
+          {moment.text}
+        </p>
+      </div>
 
       {/* Continue button */}
-      <motion.button
+      <button
         onClick={onContinue}
-        className={`${moment.color} w-16 h-16 rounded-full flex items-center justify-center hover:opacity-90 transition-opacity`}
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        className={`${moment.color} w-16 h-16 rounded-full flex items-center justify-center hover:opacity-90 transition-opacity mx-auto`}
       >
         <Image 
           src="/arrow_right.png" 
@@ -69,7 +49,7 @@ export default function LogConfirmation({ moment, onContinue }: LogConfirmationP
           height={24}
           className="opacity-80"
         />
-      </motion.button>
-    </motion.div>
+      </button>
+    </div>
   );
 }

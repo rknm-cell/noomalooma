@@ -51,9 +51,9 @@ export default function PersonalityPage({ personality, onNext, onPrev }: Persona
           className="mb-8"
         >
           <h1 className={`text-5xl font-bold text-${colors.heading} mb-4`}>
-            Your Play Type
+            Your Play Identity
           </h1>
-          <p className="text-xl text-primary/70">The personality behind your play</p>
+          <p className="text-xl text-primary/70">The spirit behind your playfulness</p>
         </motion.div>
 
         {/* Personality Content */}
@@ -94,7 +94,7 @@ export default function PersonalityPage({ personality, onNext, onPrev }: Persona
             onClick={onNext}
             className={`text-${colors.next} text-xl font-semibold hover:opacity-70 transition-opacity`}
           >
-            See Your Stats →
+            Explore Your Patterns →
           </button>
         </motion.div>
       </motion.div>

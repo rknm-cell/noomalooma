@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import ProgressIndicator from '~/components/ProgressIndicator';
 import { type PlayMoment } from '~/types/playMoment';
 import SummaryPage from '~/components/analysis/SummaryPage';
 import PersonalityPage from '~/components/analysis/PersonalityPage';
@@ -44,6 +47,7 @@ interface StoredPlayMoment {
 type AnalysisStep = 'loading' | 'summary' | 'personality' | 'stats' | 'recommendations' | 'funfact' | 'complete';
 
 export default function AnalysisPage() {
+  const router = useRouter();
   const [insights, setInsights] = useState<AnalysisInsights | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -134,8 +138,57 @@ export default function AnalysisPage() {
   };
 
   const completeAnalysis = () => {
-    // Redirect to home page or show completion message
-    window.location.href = '/';
+    setCurrentStep('complete');
+  };
+
+  const handleBack = () => {
+    if (currentStep === 'summary') {
+      router.push('/');
+    } else if (currentStep === 'personality') {
+      setCurrentStep('summary');
+    } else if (currentStep === 'stats') {
+      setCurrentStep('personality');
+    } else if (currentStep === 'recommendations') {
+      setCurrentStep('stats');
+    } else if (currentStep === 'funfact') {
+      setCurrentStep('recommendations');
+    } else if (currentStep === 'complete') {
+      setCurrentStep('funfact');
+    }
+  };
+
+  const renderAnalysisStep = (stepComponent: React.ReactNode) => {
+    return (
+      <main className="min-h-screen flex flex-col">
+        {/* Top Navigation - Fixed at top */}
+        <div className="w-full flex items-center justify-between p-4 pt-6">
+          {/* Back Button */}
+          <button
+            onClick={handleBack}
+            className="w-10 h-10 rounded-full flex items-center justify-center"
+          >
+            <Image 
+              src="/arrow_left.png" 
+              alt="back" 
+              width={20} 
+              height={20}
+              className="opacity-70"
+            />
+          </button>
+
+          {/* Progress Indicator */}
+          <ProgressIndicator currentStep={currentStep} totalSteps={6} />
+
+          {/* Spacer for balance */}
+          <div className="w-10"></div>
+        </div>
+
+        {/* Main Content - Top Aligned */}
+        <div className="flex-1 flex flex-col items-center justify-start p-4 pt-8">
+          {stepComponent}
+        </div>
+      </main>
+    );
   };
 
   if (loading || currentStep === 'loading') {
@@ -190,10 +243,10 @@ export default function AnalysisPage() {
   // Render different pages based on current step
   switch (currentStep) {
     case 'summary':
-      return <SummaryPage summary={insights.summary} onNext={nextStep} />;
+      return renderAnalysisStep(<SummaryPage summary={insights.summary} onNext={nextStep} />);
     
     case 'personality':
-      return (
+      return renderAnalysisStep(
         <PersonalityPage 
           personality={insights.personality} 
           onNext={nextStep} 
@@ -202,7 +255,7 @@ export default function AnalysisPage() {
       );
     
     case 'stats':
-      return (
+      return renderAnalysisStep(
         <StatsPage 
           patterns={insights.patterns} 
           onNext={nextStep} 
@@ -211,7 +264,7 @@ export default function AnalysisPage() {
       );
     
     case 'recommendations':
-      return (
+      return renderAnalysisStep(
         <RecommendationsPage 
           recommendations={insights.recommendations} 
           onNext={nextStep} 
@@ -220,7 +273,7 @@ export default function AnalysisPage() {
       );
     
     case 'funfact':
-      return (
+      return renderAnalysisStep(
         <FunFactPage 
           funFact={insights.funFact} 
           onPrev={prevStep} 
@@ -237,7 +290,7 @@ export default function AnalysisPage() {
             className="text-center"
           >
             <div className="text-6xl mb-4">🎉</div>
-            <h1 className="text-3xl font-bold text-primary mb-4">Play Wrapped Complete!</h1>
+            <h1 className="text-3xl font-bold text-primary mb-4">Your Play Story Complete!</h1>
             <p className="text-lg text-primary mb-6">Thanks for exploring your playful side!</p>
             <Link
               href="/"

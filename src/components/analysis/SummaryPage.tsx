@@ -9,6 +9,8 @@ interface SummaryPageProps {
 }
 
 const availableColors = ['purple', 'pink', 'orange', 'lavender', 'blue', 'fuschia'];
+const titleText = "Your Play Story";
+const letters = titleText.split('');
 
 export default function SummaryPage({ summary, onNext }: SummaryPageProps) {
   const [colors, setColors] = useState<{ heading: string; text: string; button: string }>({
@@ -16,6 +18,7 @@ export default function SummaryPage({ summary, onNext }: SummaryPageProps) {
     text: 'primary',
     button: 'green'
   });
+  const [letterColors, setLetterColors] = useState<string[]>([]);
 
   useEffect(() => {
     const randomColors = {
@@ -24,6 +27,23 @@ export default function SummaryPage({ summary, onNext }: SummaryPageProps) {
       button: availableColors[Math.floor(Math.random() * availableColors.length)] ?? 'blue'
     };
     setColors(randomColors);
+
+    // Initialize letter colors
+    const initialLetterColors = letters.map(() => 
+      availableColors[Math.floor(Math.random() * availableColors.length)] ?? 'purple'
+    );
+    setLetterColors(initialLetterColors);
+  }, []);
+
+  // Animate letter colors
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setLetterColors(prev => 
+        prev.map(() => availableColors[Math.floor(Math.random() * availableColors.length)] ?? 'purple')
+      );
+    }, 1000); // Change colors every 1000ms
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -41,10 +61,25 @@ export default function SummaryPage({ summary, onNext }: SummaryPageProps) {
           transition={{ delay: 0.2 }}
           className="mb-8"
         >
-          <h1 className="text-5xl font-bold text-primary mb-4">
-            Your Play Wrapped
+          <h1 className="text-5xl font-bold mb-4">
+            {letters.map((letter, index) => (
+              <motion.span
+                key={index}
+                className={`text-${letterColors[index] ?? 'purple'}`}
+                animate={{ 
+                  color: `var(--color-${letterColors[index] ?? 'purple'})`,
+                  scale: [1, 1.05, 1]
+                }}
+                transition={{ 
+                  color: { duration: 0, ease: "linear" }, // Instant color change
+                  scale: { duration: 0.6, ease: "easeInOut", delay: index * 0.05 }
+                }}
+              >
+                {letter}
+              </motion.span>
+            ))}
           </h1>
-          <p className="text-xl text-primary/70">This week in your playful life</p>
+          <p className="text-xl text-primary/70">A week of playful moments</p>
         </motion.div>
 
         {/* Summary Content */}
@@ -54,7 +89,7 @@ export default function SummaryPage({ summary, onNext }: SummaryPageProps) {
           transition={{ delay: 0.4 }}
           className="mb-12"
         >
-          <h2 className={`text-3xl font-bold text-${colors.heading} mb-6`}>This Week You...</h2>
+          <h2 className={`text-3xl font-bold text-${colors.heading} mb-6`}>Your Week of Play</h2>
           <p className="text-primary text-2xl leading-relaxed">{summary}</p>
         </motion.div>
 
@@ -66,7 +101,7 @@ export default function SummaryPage({ summary, onNext }: SummaryPageProps) {
           onClick={onNext}
           className={`text-${colors.button} text-2xl font-semibold hover:opacity-70 transition-opacity`}
         >
-          Discover Your Play Type →
+          Meet Your Play Self →
         </motion.button>
       </motion.div>
     </div>

@@ -90,7 +90,7 @@ export default function HomePage() {
           whileTap={{ scale: 0.95 }}
           className="inline-block bg-tan text-primary px-6 py-3 rounded-full font-semibold text-lg"
         >
-          How did you play this week?
+          See Your Play Story 🎭
         </motion.a>
       </motion.div>
 

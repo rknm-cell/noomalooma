@@ -45,9 +45,9 @@ export default function RecommendationsPage({ recommendations, onNext, onPrev }:
           className="mb-8"
         >
           <h1 className={`text-5xl font-bold text-${colors.heading} mb-4`}>
-            Keep the Play Going
+            Play Ideas for You
           </h1>
-          <p className="text-xl text-primary/70">Your next playful adventures</p>
+          <p className="text-xl text-primary/70">Ways to expand your playfulness</p>
         </motion.div>
 
         {/* Recommendations Content */}
@@ -88,7 +88,7 @@ export default function RecommendationsPage({ recommendations, onNext, onPrev }:
             onClick={onNext}
             className={`text-${colors.next} text-xl font-semibold hover:opacity-70 transition-opacity`}
           >
-            Fun Fact →
+            One More Thing →
           </button>
         </motion.div>
       </motion.div>
