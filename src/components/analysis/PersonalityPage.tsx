@@ -26,11 +26,11 @@ export default function PersonalityPage({ personality, onNext, onPrev }: Persona
 
   useEffect(() => {
     const randomColors = {
-      heading: availableColors[Math.floor(Math.random() * availableColors.length)] || 'purple',
-      title: availableColors[Math.floor(Math.random() * availableColors.length)] || 'pink',
+      heading: availableColors[Math.floor(Math.random() * availableColors.length)] ?? 'purple',
+      title: availableColors[Math.floor(Math.random() * availableColors.length)] ?? 'pink',
       description: 'primary',
-      back: availableColors[Math.floor(Math.random() * availableColors.length)] || 'orange',
-      next: availableColors[Math.floor(Math.random() * availableColors.length)] || 'blue'
+      back: availableColors[Math.floor(Math.random() * availableColors.length)] ?? 'orange',
+      next: availableColors[Math.floor(Math.random() * availableColors.length)] ?? 'blue'
     };
     setColors(randomColors);
   }, []);
@@ -72,7 +72,7 @@ export default function PersonalityPage({ personality, onNext, onPrev }: Persona
             {personality.emoji}
           </motion.div>
           <h2 className={`text-4xl font-bold text-${colors.title} mb-4`}>
-            You're {personality.title}
+            You&apos;re {personality.title}
           </h2>
           <p className="text-primary text-xl leading-relaxed">{personality.description}</p>
         </motion.div>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { type PlayMoment } from '~/types/playMoment';
 import SummaryPage from '~/components/analysis/SummaryPage';
 import PersonalityPage from '~/components/analysis/PersonalityPage';
@@ -238,12 +239,12 @@ export default function AnalysisPage() {
             <div className="text-6xl mb-4">🎉</div>
             <h1 className="text-3xl font-bold text-primary mb-4">Play Wrapped Complete!</h1>
             <p className="text-lg text-primary mb-6">Thanks for exploring your playful side!</p>
-            <a
+            <Link
               href="/"
               className="text-green text-xl font-semibold hover:opacity-70 transition-opacity"
             >
               Back to Play
-            </a>
+            </Link>
           </motion.div>
         </div>
       );

@@ -21,10 +21,10 @@ export default function FunFactPage({ funFact, onPrev, onComplete }: FunFactPage
 
   useEffect(() => {
     const randomColors = {
-      heading: availableColors[Math.floor(Math.random() * availableColors.length)] || 'purple',
-      emoji: availableColors[Math.floor(Math.random() * availableColors.length)] || 'pink',
-      back: availableColors[Math.floor(Math.random() * availableColors.length)] || 'orange',
-      complete: availableColors[Math.floor(Math.random() * availableColors.length)] || 'blue'
+      heading: availableColors[Math.floor(Math.random() * availableColors.length)] ?? 'purple',
+      emoji: availableColors[Math.floor(Math.random() * availableColors.length)] ?? 'pink',
+      back: availableColors[Math.floor(Math.random() * availableColors.length)] ?? 'orange',
+      complete: availableColors[Math.floor(Math.random() * availableColors.length)] ?? 'blue'
     };
     setColors(randomColors);
   }, []);

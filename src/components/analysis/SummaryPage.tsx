@@ -19,9 +19,9 @@ export default function SummaryPage({ summary, onNext }: SummaryPageProps) {
 
   useEffect(() => {
     const randomColors = {
-      heading: availableColors[Math.floor(Math.random() * availableColors.length)] || 'purple',
+      heading: availableColors[Math.floor(Math.random() * availableColors.length)] ?? 'purple',
       text: 'primary',
-      button: availableColors[Math.floor(Math.random() * availableColors.length)] || 'blue'
+      button: availableColors[Math.floor(Math.random() * availableColors.length)] ?? 'blue'
     };
     setColors(randomColors);
   }, []);

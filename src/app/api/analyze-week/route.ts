@@ -62,7 +62,6 @@ export async function POST(request: Request): Promise<Response> {
       const getSimpleProfile = (moments: PlayMoment[]) => {
         if (moments.length === 0) return null;
         
-        const colors = moments.map(m => m.color);
         const emojis = moments.map(m => m.emoji);
         const times = moments.map(m => new Date(m.timestamp).getHours());
         
@@ -90,7 +89,7 @@ export async function POST(request: Request): Promise<Response> {
       
       const fallbackInsights: AnalysisInsights = {
         summary: weeklyMoments.length > 0 
-          ? `You're a ${profile?.title} who found magic in ${weeklyMoments.length} moments this week! 🎉`
+          ? `You're a ${profile?.title ?? 'Playful Person'} who found magic in ${weeklyMoments.length} moments this week! 🎉`
           : "You're ready to discover your play personality - let's start logging those moments!",
         patterns: weeklyMoments.length > 0 ? [
           {
@@ -105,9 +104,9 @@ export async function POST(request: Request): Promise<Response> {
           }
         ] : [],
         personality: {
-          title: profile?.title || "The Play Explorer",
-          description: profile?.desc || "Ready to discover the playful side of everyday life",
-          emoji: profile?.emoji || "🔍"
+          title: profile?.title ?? "The Play Explorer",
+          description: profile?.desc ?? "Ready to discover the playful side of everyday life",
+          emoji: profile?.emoji ?? "🔍"
         },
         recommendations: weeklyMoments.length > 0 ? [
           "Keep exploring your unique play style",

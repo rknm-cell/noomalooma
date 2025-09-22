@@ -21,10 +21,10 @@ export default function RecommendationsPage({ recommendations, onNext, onPrev }:
 
   useEffect(() => {
     const randomColors = {
-      heading: availableColors[Math.floor(Math.random() * availableColors.length)] || 'purple',
-      back: availableColors[Math.floor(Math.random() * availableColors.length)] || 'orange',
-      next: availableColors[Math.floor(Math.random() * availableColors.length)] || 'blue',
-      sparkles: recommendations.map(() => availableColors[Math.floor(Math.random() * availableColors.length)] || 'pink')
+      heading: availableColors[Math.floor(Math.random() * availableColors.length)] ?? 'purple',
+      back: availableColors[Math.floor(Math.random() * availableColors.length)] ?? 'orange',
+      next: availableColors[Math.floor(Math.random() * availableColors.length)] ?? 'blue',
+      sparkles: recommendations.map(() => availableColors[Math.floor(Math.random() * availableColors.length)] ?? 'pink')
     };
     setColors(randomColors);
   }, [recommendations]);
@@ -65,7 +65,7 @@ export default function RecommendationsPage({ recommendations, onNext, onPrev }:
               transition={{ delay: 0.6 + index * 0.2 }}
               className="flex items-start gap-4 justify-center"
             >
-              <span className={`text-2xl text-${colors.sparkles[index] || 'primary'}`}>✨</span>
+              <span className={`text-2xl text-${colors.sparkles[index] ?? 'primary'}`}>✨</span>
               <p className="text-primary text-lg text-center">{rec}</p>
             </motion.div>
           ))}

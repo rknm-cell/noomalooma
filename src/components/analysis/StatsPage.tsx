@@ -27,10 +27,10 @@ export default function StatsPage({ patterns, onNext, onPrev }: StatsPageProps) 
 
   useEffect(() => {
     const randomColors = {
-      heading: availableColors[Math.floor(Math.random() * availableColors.length)] || 'purple',
-      back: availableColors[Math.floor(Math.random() * availableColors.length)] || 'orange',
-      next: availableColors[Math.floor(Math.random() * availableColors.length)] || 'blue',
-      patternTitles: patterns.map(() => availableColors[Math.floor(Math.random() * availableColors.length)] || 'pink')
+      heading: availableColors[Math.floor(Math.random() * availableColors.length)] ?? 'purple',
+      back: availableColors[Math.floor(Math.random() * availableColors.length)] ?? 'orange',
+      next: availableColors[Math.floor(Math.random() * availableColors.length)] ?? 'blue',
+      patternTitles: patterns.map(() => availableColors[Math.floor(Math.random() * availableColors.length)] ?? 'pink')
     };
     setColors(randomColors);
   }, [patterns]);
@@ -73,7 +73,7 @@ export default function StatsPage({ patterns, onNext, onPrev }: StatsPageProps) 
             >
               <div className="flex items-center justify-center gap-4 mb-3">
                 <span className="text-4xl">{pattern.emoji}</span>
-                <h3 className={`text-2xl font-bold text-${colors.patternTitles[index] || 'primary'}`}>{pattern.title}</h3>
+                <h3 className={`text-2xl font-bold text-${colors.patternTitles[index] ?? 'primary'}`}>{pattern.title}</h3>
               </div>
               <p className="text-primary text-lg">{pattern.description}</p>
             </motion.div>
