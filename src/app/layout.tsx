@@ -26,7 +26,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${jakarta.variable} ${schoolbell.variable}`}>
-      <body className="font-jakarta bg-main">{children}</body>
+      <body className="font-jakarta font-bold bg-main">{children}</body>
     </html>
   );
 }

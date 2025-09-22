@@ -47,7 +47,7 @@ export default function SummaryPage({ summary, onNext }: SummaryPageProps) {
   }, []);
 
   return (
-    <div className="min-h-screen bg-main flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-main flex flex-col items-center justify-start p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -101,7 +101,7 @@ export default function SummaryPage({ summary, onNext }: SummaryPageProps) {
           onClick={onNext}
           className={`text-${colors.button} text-2xl font-semibold hover:opacity-70 transition-opacity`}
         >
-          Meet Your Play Self →
+          Meet Your Play Self 
         </motion.button>
       </motion.div>
     </div>

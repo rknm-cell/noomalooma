@@ -74,6 +74,21 @@ export default function PlayButton({ onClick }: PlayButtonProps) {
     }, 300);
   };
 
+  const handleHover = () => {
+    const colors = [
+      'bg-green',
+      'bg-purple', 
+      'bg-pink',
+      'bg-orange',
+      'bg-lavender',
+      'bg-blue',
+      'bg-fuschia',
+      'bg-tan'
+    ];
+    const randomColor = colors[Math.floor(Math.random() * colors.length)] ?? 'bg-green';
+    setButtonColor(randomColor);
+  };
+
   return (
     <div className="relative flex items-center justify-center">
       {/* Main Play Button */}
@@ -96,6 +111,7 @@ export default function PlayButton({ onClick }: PlayButtonProps) {
           scale: 0.95,
           transition: { duration: 0.1 }
         }}
+        onHoverStart={handleHover}
         onTap={handleTap}
       >
         {showAnimation && currentFrame > 0 ? (

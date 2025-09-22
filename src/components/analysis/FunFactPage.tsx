@@ -30,7 +30,7 @@ export default function FunFactPage({ funFact, onPrev, onComplete }: FunFactPage
   }, []);
 
   return (
-    <div className="min-h-screen bg-main flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-main flex flex-col items-center justify-start p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -57,14 +57,6 @@ export default function FunFactPage({ funFact, onPrev, onComplete }: FunFactPage
           transition={{ delay: 0.4 }}
           className="mb-12"
         >
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.6, type: "spring", stiffness: 200 }}
-            className={`text-6xl mb-6 text-${colors.emoji}`}
-          >
-            🤯
-          </motion.div>
           <p className="text-primary text-2xl leading-relaxed">{funFact}</p>
         </motion.div>
 
@@ -85,7 +77,7 @@ export default function FunFactPage({ funFact, onPrev, onComplete }: FunFactPage
             onClick={onComplete}
             className={`text-${colors.complete} text-xl font-semibold hover:opacity-70 transition-opacity`}
           >
-            Wonderful! 🎉
+            Wonderful!
           </button>
         </motion.div>
       </motion.div>

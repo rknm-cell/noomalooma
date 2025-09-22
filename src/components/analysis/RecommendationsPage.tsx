@@ -30,7 +30,7 @@ export default function RecommendationsPage({ recommendations, onNext, onPrev }:
   }, [recommendations]);
 
   return (
-    <div className="min-h-screen bg-main flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-main flex flex-col items-center justify-start p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -65,7 +65,6 @@ export default function RecommendationsPage({ recommendations, onNext, onPrev }:
               transition={{ delay: 0.6 + index * 0.2 }}
               className="flex items-start gap-4 justify-center"
             >
-              <span className={`text-2xl text-${colors.sparkles[index] ?? 'primary'}`}>✨</span>
               <p className="text-primary text-lg text-center">{rec}</p>
             </motion.div>
           ))}
@@ -76,14 +75,9 @@ export default function RecommendationsPage({ recommendations, onNext, onPrev }:
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
-          className="flex gap-8"
+          className="flex gap-8 justify-center"
         >
-          <button
-            onClick={onPrev}
-            className={`text-${colors.back} text-xl font-semibold hover:opacity-70 transition-opacity`}
-          >
-            ← Back
-          </button>
+          
           <button
             onClick={onNext}
             className={`text-${colors.next} text-xl font-semibold hover:opacity-70 transition-opacity`}
