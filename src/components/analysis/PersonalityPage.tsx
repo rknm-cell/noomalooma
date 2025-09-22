@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 interface PersonalityPageProps {
@@ -79,9 +80,18 @@ export default function PersonalityPage({ personality, onNext, onPrev }: Persona
           
           <button
             onClick={onNext}
-            className={`text-${colors.next} text-xl font-semibold hover:opacity-70 transition-opacity text-center`}
+            className="flex items-center gap-3 hover:opacity-70 transition-opacity"
           >
-            Explore Your Patterns →
+            <span className={`text-${colors.next} text-xl font-semibold`}>
+              Explore Your Patterns
+            </span>
+            <Image 
+              src="/arrow_right.png" 
+              alt="next" 
+              width={24} 
+              height={24}
+              className="w-6 h-6"
+            />
           </button>
         </motion.div>
       </motion.div>

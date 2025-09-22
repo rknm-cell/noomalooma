@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 interface Pattern {
@@ -89,9 +90,18 @@ export default function StatsPage({ patterns, onNext, onPrev }: StatsPageProps) 
           
           <button
             onClick={onNext}
-            className={`text-${colors.next} text-xl font-semibold hover:opacity-70 transition-opacity`}
+            className="flex items-center gap-3 hover:opacity-70 transition-opacity"
           >
-            What&apos;s Next →
+            <span className={`text-${colors.next} text-xl font-semibold`}>
+              What&apos;s Next
+            </span>
+            <Image 
+              src="/arrow_right.png" 
+              alt="next" 
+              width={24} 
+              height={24}
+              className="w-6 h-6"
+            />
           </button>
         </motion.div>
       </motion.div>
