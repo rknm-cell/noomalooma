@@ -103,7 +103,7 @@ export default function BouncingEmoji({
 
   return (
     <motion.button
-      className={`absolute text-4xl cursor-grab pointer-events-auto z-10 border border-red-500 ${
+      className={`absolute text-4xl cursor-grab pointer-events-auto z-10 ${
         selectedEmoji === emoji.emoji ? `${selectedColor} rounded-full p-2` : ''
       }`}
       onDragEnd={handleDragEnd}

@@ -3,12 +3,15 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import type { PlayMoment } from '../../types/playMoment';
 import { useBouncingEmojis } from '../../hooks/useBouncingEmojis';
+import { useLoggingPrompts } from '../../hooks/useLoggingPrompts';
 import TextInputStep from '../../components/TextInputStep';
 import EmojiSelectionStep from '../../components/EmojiSelectionStep';
 import ColorSelectionStep from '../../components/ColorSelectionStep';
 import LogConfirmation from '../../components/LogConfirmation';
+import ProgressIndicator from '../../components/ProgressIndicator';
 
 export default function LogPage() {
   const router = useRouter();
@@ -36,6 +39,9 @@ export default function LogPage() {
 
   // Use bouncing emojis hook
   const { bouncingEmojis, setBouncingEmojis } = useBouncingEmojis();
+  
+  // Use dynamic prompts
+  const { textPrompt, emojiPrompt, colorPrompt } = useLoggingPrompts();
 
   // Randomize initial selections
   useEffect(() => {
@@ -87,25 +93,61 @@ export default function LogPage() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-4 border border-red-500">
+    <main className="min-h-screen flex flex-col">
+      {/* Top Navigation - Fixed at top */}
+      <motion.div
+        className="w-full flex items-center justify-between p-4 pt-6"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* Back Button */}
+        <motion.button
+          onClick={handleBack}
+          className="w-10 h-10 rounded-full bg-white/80 backdrop-blur-sm flex items-center justify-center border border-gray-200 shadow-sm"
+          whileHover={{ scale: 1.05, backgroundColor: 'rgba(255, 255, 255, 0.9)' }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Image 
+            src="/arrow_left.png" 
+            alt="back" 
+            width={20} 
+            height={20}
+            className="opacity-70"
+          />
+        </motion.button>
+
+        {/* Progress Indicator */}
+        <ProgressIndicator currentStep={currentStep} totalSteps={4} />
+
+        {/* Spacer for balance */}
+        <div className="w-10"></div>
+      </motion.div>
+
+      {/* Main Content - Centered */}
+      <div className="flex-1 flex flex-col items-center justify-center p-4">
+
+      {/* Text Prompt - above the main card */}
+      {currentStep === 'text' && (
+        <motion.div
+          className="w-full max-w-sm px-8 mb-8"
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <h2 className="text-2xl font-light font-schoolbell text-primary text-center leading-relaxed">
+            {textPrompt}
+          </h2>
+        </motion.div>
+      )}
+      
       <motion.div
         id="main-card"
-        className={`${selectedColor} rounded-3xl p-8 w-full max-w-sm relative border border-red-500`}
+        className={`${selectedColor} rounded-3xl p-8 w-full max-w-sm relative`}
         initial={{ scale: 0.7, opacity: 0, rotate: -5 }}
         animate={{ scale: 1, opacity: 1, rotate: [0, 2, -1, 0] }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
+        transition={{ duration: 0.4, ease: "easeOut", delay: 0.2 }}
       >
-        {/* Back button - hidden during confirmation */}
-        {currentStep !== 'confirmation' && (
-          <motion.button
-            onClick={handleBack}
-            className="absolute -top-4 -left-4 bg-gray-100 text-gray-600 w-8 h-8 rounded-full flex items-center justify-center font-jakarta border border-red-500"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            ←
-          </motion.button>
-        )}
 
         {/* Step 1: Text Input */}
         {currentStep === 'text' && (
@@ -114,6 +156,7 @@ export default function LogPage() {
             setText={setText}
             onNext={handleTextSubmit}
             selectedColor={selectedColor}
+            prompt={textPrompt}
           />
         )}
 
@@ -127,6 +170,7 @@ export default function LogPage() {
             isDragOverDropZone={isDragOverDropZone}
             setIsDragOverDropZone={setIsDragOverDropZone}
             onEmojiSelect={handleEmojiSelect}
+            prompt={emojiPrompt}
           />
         )}
 
@@ -136,6 +180,7 @@ export default function LogPage() {
             colors={colors}
             selectedColor={selectedColor}
             onColorSelect={handleColorSelect}
+            prompt={colorPrompt}
           />
         )}
 
@@ -147,6 +192,7 @@ export default function LogPage() {
           />
         )}
       </motion.div>
+      </div>
     </main>
   );
 }

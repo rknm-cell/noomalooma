@@ -107,7 +107,7 @@ export default function PlayButton({ onClick }: PlayButtonProps) {
             className="w-full h-full object-contain scale-200"
           />
         ) : (
-          <span className="text-6xl sm:text-7xl md:text-8xl font-light font-jakarta">play</span>
+          <span className="text-6xl sm:text-7xl md:text-8xl font-light font-schoolbell">play</span>
         )}
       </motion.button>
 

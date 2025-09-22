@@ -13,6 +13,7 @@ interface EmojiSelectionStepProps {
   isDragOverDropZone: boolean;
   setIsDragOverDropZone: (isOver: boolean) => void;
   onEmojiSelect: (emoji: string) => void;
+  prompt: string;
 }
 
 export default function EmojiSelectionStep({
@@ -22,7 +23,8 @@ export default function EmojiSelectionStep({
   selectedColor,
   isDragOverDropZone,
   setIsDragOverDropZone,
-  onEmojiSelect
+  onEmojiSelect,
+  prompt
 }: EmojiSelectionStepProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -34,7 +36,7 @@ export default function EmojiSelectionStep({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <h3 className="text-xl font-light font-jakarta text-primary mb-6">how did it feel?</h3>
+        <h3 className="text-xl font-light font-schoolbell text-primary mb-6">{prompt}</h3>
         <p className="text-sm font-light font-jakarta text-gray-600 mb-4">drag an emoji into this box to select</p>
         <div className={`w-full h-20 border-2 border-dashed rounded-xl flex items-center justify-center transition-colors ${
           isDragOverDropZone 

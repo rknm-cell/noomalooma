@@ -3,6 +3,7 @@
 @theme {
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-schoolbell: var(--font-schoolbell), cursive;
   
   /* Semantic Color Palette */
   --color-bg-main: #f9f5ef;
