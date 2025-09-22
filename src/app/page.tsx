@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import PlayButton from '../components/PlayButton';
 
 export default function HomePage() {
   const letters = ['n', 'o', 'o', 'm', 'a', 'l', 'o', 'o', 'm', 'a'];
@@ -28,6 +29,11 @@ export default function HomePage() {
     const newColors = [...colorsState];
     newColors[index] = getRandomColor();
     setColorsState(newColors);
+  };
+
+  const handlePlayButtonClick = () => {
+    console.log('Play button clicked! Time to log a moment!');
+    // TODO: Implement play moment logging flow
   };
 
   return (
@@ -63,6 +69,11 @@ export default function HomePage() {
             {letter}
           </motion.span>
         ))}
+      </div>
+      
+      {/* Play Button Section */}
+      <div className="mt-16 sm:mt-20">
+        <PlayButton onClick={handlePlayButtonClick} />
       </div>
     </main>
   );

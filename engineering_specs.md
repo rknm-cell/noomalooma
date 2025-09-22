@@ -5,6 +5,7 @@
 ### Tech Stack
 - **Framework**: Next.js 14+ (App Router)
 - **Styling**: Styled Components
+- **Animations**: Framer Motion
 - **State Management**: React useState/useEffect
 - **AI Insights**: Vercel AI SDK
 - **Deployment**: Vercel
@@ -82,16 +83,16 @@ interface PlayButtonProps {
 ```
 
 **Features**:
-- Hand-drawn scribble animation on page load (3-frame animation)
-- Squiggle ripple effect on tap (3 frames radiating out)
+- Hand-drawn scribble animation on page load using Framer Motion
+- Squiggle ripple effect on tap with motion.div
 - Large, colorful, always visible
-- CSS-only animations for performance
+- Smooth spring animations for natural feel
 
-**Animation Frames**:
-- Frame 1: Initial scribble appearance
-- Frame 2: Scribble completion
-- Frame 3: Settled state
-- Ripple: 3 expanding squiggle rings
+**Framer Motion Animations**:
+- Initial scribble: `initial={{ pathLength: 0 }}` → `animate={{ pathLength: 1 }}`
+- Ripple effect: `animate={{ scale: [1, 1.2, 1], opacity: [1, 0.5, 0] }}`
+- Hover states: `whileHover={{ scale: 1.05 }}`
+- Tap feedback: `whileTap={{ scale: 0.95 }}`
 
 ### 2. FloatingClouds Component
 **Purpose**: Emoji, color, and mood selection interface
@@ -105,11 +106,18 @@ interface FloatingCloudsProps {
 ```
 
 **Features**:
-- Divs that bump around each other
-- Staggered appearance animation
-- Touch-friendly selection
-- Stretch goal: Draggable clouds
+- Divs that bump around each other using Framer Motion
+- Staggered appearance animation with `staggerChildren`
+- Touch-friendly selection with `whileTap` animations
+- Draggable clouds using `drag` prop
 - Pre-defined options with custom input option
+- Spring physics for natural movement
+
+**Framer Motion Animations**:
+- Staggered entrance: `staggerChildren: 0.1`
+- Bump animation: `animate={{ x: [0, 10, -5, 0], y: [0, -5, 10, 0] }}`
+- Selection feedback: `whileTap={{ scale: 0.9, rotate: 5 }}`
+- Drag constraints: `drag dragConstraints={{ left: -50, right: 50, top: -50, bottom: 50 }}`
 
 **Cloud Types**:
 - Emojis: 😊 🤪 😌 ✨ 🎉 🎨 🎭 🎪
@@ -127,11 +135,17 @@ interface PlayLogViewProps {
 ```
 
 **Features**:
-- Mood-based organization
-- AI-generated insights
-- Mind map-style visualization
-- Swipe interactions for navigation
-- Surprise revelations about play patterns
+- Mood-based organization with smooth transitions
+- AI-generated insights with reveal animations
+- Mind map-style visualization using Framer Motion
+- Swipe interactions for navigation with `drag` gestures
+- Surprise revelations about play patterns with staggered reveals
+
+**Framer Motion Animations**:
+- Page transitions: `initial={{ opacity: 0, y: 20 }}` → `animate={{ opacity: 1, y: 0 }}`
+- Insight reveals: `staggerChildren: 0.2` for sequential appearance
+- Swipe navigation: `drag="x"` with `dragConstraints`
+- Mind map connections: `animate={{ pathLength: 1 }}` for drawing lines
 
 ### 4. MomentCard Component
 **Purpose**: Individual play moment display
@@ -145,10 +159,16 @@ interface MomentCardProps {
 ```
 
 **Features**:
-- Color-coded by mood
-- Emoji and text display
+- Color-coded by mood with smooth color transitions
+- Emoji and text display with entrance animations
 - Timestamp formatting
-- Touch interactions
+- Touch interactions with hover/tap feedback
+
+**Framer Motion Animations**:
+- Card entrance: `initial={{ opacity: 0, scale: 0.9 }}` → `animate={{ opacity: 1, scale: 1 }}`
+- Hover effect: `whileHover={{ y: -5, scale: 1.02 }}`
+- Tap feedback: `whileTap={{ scale: 0.98 }}`
+- Color transitions: `animate={{ backgroundColor: moodColor }}`
 
 ### 5. Navigation Component
 **Purpose**: Simple navigation between views
@@ -164,7 +184,12 @@ interface NavigationProps {
 **Features**:
 - Two main buttons: "Log Play" and "My Play Log"
 - No traditional navbar
-- Clear visual indication of current view
+- Clear visual indication of current view with smooth transitions
+
+**Framer Motion Animations**:
+- Button hover: `whileHover={{ scale: 1.05 }}`
+- Active state: `animate={{ backgroundColor: activeColor }}`
+- Page transitions: `AnimatePresence` for smooth view changes
 
 ## Hooks & Utilities
 
@@ -245,10 +270,11 @@ const generateInsights = async (moments: PlayMoment[]) => {
 ## Performance Considerations
 
 ### Animation Performance
-- CSS-only animations (no JavaScript)
-- Transform and opacity changes only
-- Reduced motion support
-- Mobile-optimized frame rates
+- Framer Motion with optimized animations
+- Transform and opacity changes for 60fps
+- Reduced motion support with `prefers-reduced-motion`
+- Mobile-optimized spring physics
+- `layout` prop for automatic layout animations
 
 ### Data Management
 - Local storage with JSON serialization
@@ -266,6 +292,18 @@ const generateInsights = async (moments: PlayMoment[]) => {
 ### Environment Variables
 ```
 OPENAI_API_KEY=your_openai_key
+```
+
+### Package Dependencies
+```json
+{
+  "dependencies": {
+    "framer-motion": "^10.16.0",
+    "styled-components": "^6.1.0",
+    "ai": "^2.2.0",
+    "@ai-sdk/openai": "^0.0.0"
+  }
+}
 ```
 
 ## Development Timeline
