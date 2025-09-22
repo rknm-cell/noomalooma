@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, type PanInfo } from 'framer-motion';
 import type { BouncingEmoji as BouncingEmojiType } from '../../types/bouncingEmoji';
 
 interface BouncingEmojiProps {
@@ -20,7 +20,7 @@ export default function BouncingEmoji({
   setBouncingEmojis,
   setIsDragOverDropZone 
 }: BouncingEmojiProps) {
-  const handleDragEnd = (event: any, info: any) => {
+  const handleDragEnd = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     setIsDragOverDropZone(false); // Reset drag over state
     
     if (info) {
@@ -73,7 +73,7 @@ export default function BouncingEmoji({
     ));
   };
 
-  const handleDrag = (event: any, info: any) => {
+  const handleDrag = (event: MouseEvent | TouchEvent | PointerEvent, info: PanInfo) => {
     // Update position during drag - match mouse movement exactly
     if (info) {
       setBouncingEmojis(prev => prev.map(e => 

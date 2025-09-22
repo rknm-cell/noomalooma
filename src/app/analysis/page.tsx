@@ -20,6 +20,21 @@ interface AnalysisInsights {
   funFact: string;
 }
 
+interface ApiResponse {
+  insights?: AnalysisInsights;
+  error?: string;
+}
+
+interface StoredPlayMoment {
+  id: string;
+  timestamp: string; // JSON stores dates as strings
+  text: string;
+  emoji: string;
+  color: string;
+  mood: string;
+  tags: string[];
+}
+
 export default function AnalysisPage() {
   const [insights, setInsights] = useState<AnalysisInsights | null>(null);
   const [loading, setLoading] = useState(true);
@@ -36,7 +51,8 @@ export default function AnalysisPage() {
           return;
         }
 
-        const moments: PlayMoment[] = JSON.parse(storedMoments).map((moment: any) => ({
+        const storedMomentsData = JSON.parse(storedMoments) as StoredPlayMoment[];
+        const moments: PlayMoment[] = storedMomentsData.map((moment) => ({
           ...moment,
           timestamp: new Date(moment.timestamp)
         }));
@@ -50,11 +66,16 @@ export default function AnalysisPage() {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to analyze moments');
+          const errorData = await response.json() as ApiResponse;
+          throw new Error(errorData.error ?? 'Failed to analyze moments');
         }
 
-        const data = await response.json();
-        setInsights(data.insights);
+        const data = await response.json() as ApiResponse;
+        if (data.insights) {
+          setInsights(data.insights);
+        } else {
+          throw new Error('No insights received from server');
+        }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Something went wrong');
       } finally {
@@ -62,7 +83,7 @@ export default function AnalysisPage() {
       }
     };
 
-    analyzeWeek();
+    void analyzeWeek();
   }, []);
 
   if (loading) {

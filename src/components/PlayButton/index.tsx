@@ -15,22 +15,21 @@ export default function PlayButton({ onClick }: PlayButtonProps) {
   const [currentFrame, setCurrentFrame] = useState(0);
   const [showAnimation, setShowAnimation] = useState(false);
 
-  const colors = [
-    'bg-green',
-    'bg-purple', 
-    'bg-pink',
-    'bg-orange',
-    'bg-lavender',
-    'bg-blue',
-    'bg-fuschia',
-    'bg-tan'
-  ];
-
   useEffect(() => {
     // Randomize color on component mount
+    const colors = [
+      'bg-green',
+      'bg-purple', 
+      'bg-pink',
+      'bg-orange',
+      'bg-lavender',
+      'bg-blue',
+      'bg-fuschia',
+      'bg-tan'
+    ];
     const randomColor = colors[Math.floor(Math.random() * colors.length)] ?? 'bg-green';
     setButtonColor(randomColor);
-  }, [colors]);
+  }, []);
 
   // Majesty animation sequence - triggered on click
   useEffect(() => {

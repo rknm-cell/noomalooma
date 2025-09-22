@@ -10,7 +10,8 @@ export const useLocalStorage = <T>(key: string, initialValue: T) => {
     try {
       const item = window.localStorage.getItem(key);
       if (item) {
-        setStoredValue(JSON.parse(item));
+        const parsedItem = JSON.parse(item) as T;
+        setStoredValue(parsedItem);
       }
     } catch (error) {
       console.error('Error reading from localStorage:', error);
@@ -38,15 +39,17 @@ export const usePlayMoments = () => {
 
   const savePlayMoment = (moment: PlayMoment) => {
     const date = moment.timestamp.toISOString().split('T')[0];
-    setMoments(prev => ({
-      ...prev,
-      [date]: [...(prev[date] || []), moment]
-    }));
+    if (date) {
+      setMoments(prev => ({
+        ...prev,
+        [date]: [...(prev[date] ?? []), moment]
+      }));
+    }
   };
 
   const getPlayMoments = (date?: string) => {
     if (date) {
-      return moments[date] || [];
+      return moments[date] ?? [];
     }
     return Object.values(moments).flat();
   };

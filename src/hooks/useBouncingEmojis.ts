@@ -7,7 +7,7 @@ const emojis = ['😊', '🤪', '😌', '✨', '🎉', '🎨', '🎭', '🎪'];
 
 export function useBouncingEmojis() {
   const [bouncingEmojis, setBouncingEmojis] = useState<BouncingEmoji[]>([]);
-  const animationRef = useRef<number | undefined>();
+  const animationRef = useRef<number | undefined>(undefined);
 
   // Initialize bouncing emojis
   useEffect(() => {
