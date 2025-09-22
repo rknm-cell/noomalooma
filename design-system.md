@@ -1,5 +1,26 @@
 # Design System
 
+## Typography
+
+### Primary Font
+
+**Plus Jakarta Sans** is the primary font family for the design system.
+
+```css
+.plus-jakarta-sans {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+```
+
+### Font Usage
+
+- **Default**: Plus Jakarta Sans is set as the default sans-serif font in Tailwind CSS
+- **Fallbacks**: System fonts (ui-sans-serif, system-ui, sans-serif) are used as fallbacks
+- **Optical Sizing**: Enabled for better rendering at different sizes
+- **Weights**: All standard font weights are available (100-900)
+
 ## Color Palette
 
 ### Semantic Colors
