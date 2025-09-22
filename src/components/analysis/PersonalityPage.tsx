@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 interface PersonalityPageProps {
@@ -36,7 +37,7 @@ export default function PersonalityPage({ personality, onNext, onPrev }: Persona
   }, []);
 
   return (
-    <div className="min-h-screen bg-main flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-main flex flex-col items-center justify-start p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -63,14 +64,6 @@ export default function PersonalityPage({ personality, onNext, onPrev }: Persona
           transition={{ delay: 0.4 }}
           className="mb-12"
         >
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.6, type: "spring", stiffness: 200 }}
-            className="text-8xl mb-6"
-          >
-            {personality.emoji}
-          </motion.div>
           <h2 className={`text-4xl font-bold text-${colors.title} mb-4`}>
             You&apos;re {personality.title}
           </h2>
@@ -82,19 +75,23 @@ export default function PersonalityPage({ personality, onNext, onPrev }: Persona
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
-          className="flex gap-8"
+          className="flex gap-8 justify-center"
         >
-          <button
-            onClick={onPrev}
-            className={`text-${colors.back} text-xl font-semibold hover:opacity-70 transition-opacity`}
-          >
-            ← Back
-          </button>
+          
           <button
             onClick={onNext}
-            className={`text-${colors.next} text-xl font-semibold hover:opacity-70 transition-opacity`}
+            className="flex items-center gap-3 hover:opacity-70 transition-opacity"
           >
-            Explore Your Patterns →
+            <span className={`text-${colors.next} text-xl font-semibold`}>
+              Explore Your Patterns
+            </span>
+            <Image 
+              src="/arrow_right.png" 
+              alt="next" 
+              width={24} 
+              height={24}
+              className="w-6 h-6"
+            />
           </button>
         </motion.div>
       </motion.div>

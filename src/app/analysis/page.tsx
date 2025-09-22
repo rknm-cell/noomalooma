@@ -199,13 +199,6 @@ export default function AnalysisPage() {
           animate={{ opacity: 1, scale: 1 }}
           className="text-center"
         >
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-            className="text-6xl mb-4"
-          >
-            🎭
-          </motion.div>
           <p className="text-lg text-primary">Analyzing your play patterns...</p>
         </motion.div>
       </div>
@@ -220,7 +213,6 @@ export default function AnalysisPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center max-w-md"
         >
-          <div className="text-6xl mb-4">😅</div>
           <h1 className="text-2xl font-bold text-primary mb-2">Oops!</h1>
           <p className="text-primary mb-6">{error}</p>
           <motion.a
@@ -289,7 +281,6 @@ export default function AnalysisPage() {
             animate={{ opacity: 1, scale: 1 }}
             className="text-center"
           >
-            <div className="text-6xl mb-4">🎉</div>
             <h1 className="text-3xl font-bold text-primary mb-4">Your Play Story Complete!</h1>
             <p className="text-lg text-primary mb-6">Thanks for exploring your playful side!</p>
             <Link

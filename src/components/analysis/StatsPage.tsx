@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 interface Pattern {
@@ -36,7 +37,7 @@ export default function StatsPage({ patterns, onNext, onPrev }: StatsPageProps) 
   }, [patterns]);
 
   return (
-    <div className="min-h-screen bg-main flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-main flex flex-col items-center justify-start p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -71,8 +72,7 @@ export default function StatsPage({ patterns, onNext, onPrev }: StatsPageProps) 
               transition={{ delay: 0.6 + index * 0.2 }}
               className="text-center"
             >
-              <div className="flex items-center justify-center gap-4 mb-3">
-                <span className="text-4xl">{pattern.emoji}</span>
+              <div className="mb-3">
                 <h3 className={`text-2xl font-bold text-${colors.patternTitles[index] ?? 'primary'}`}>{pattern.title}</h3>
               </div>
               <p className="text-primary text-lg">{pattern.description}</p>
@@ -85,19 +85,23 @@ export default function StatsPage({ patterns, onNext, onPrev }: StatsPageProps) 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
-          className="flex gap-8"
+          className="flex gap-8 justify-center"
         >
-          <button
-            onClick={onPrev}
-            className={`text-${colors.back} text-xl font-semibold hover:opacity-70 transition-opacity`}
-          >
-            ← Back
-          </button>
+          
           <button
             onClick={onNext}
-            className={`text-${colors.next} text-xl font-semibold hover:opacity-70 transition-opacity`}
+            className="flex items-center gap-3 hover:opacity-70 transition-opacity"
           >
-            What&apos;s Next →
+            <span className={`text-${colors.next} text-xl font-semibold`}>
+              What&apos;s Next
+            </span>
+            <Image 
+              src="/arrow_right.png" 
+              alt="next" 
+              width={24} 
+              height={24}
+              className="w-6 h-6"
+            />
           </button>
         </motion.div>
       </motion.div>

@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 
 interface SummaryPageProps {
@@ -47,7 +48,7 @@ export default function SummaryPage({ summary, onNext }: SummaryPageProps) {
   }, []);
 
   return (
-    <div className="min-h-screen bg-main flex flex-col items-center justify-center p-4">
+    <div className="min-h-screen bg-main flex flex-col items-center justify-start p-4">
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -99,9 +100,18 @@ export default function SummaryPage({ summary, onNext }: SummaryPageProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
           onClick={onNext}
-          className={`text-${colors.button} text-2xl font-semibold hover:opacity-70 transition-opacity`}
+          className="flex items-center gap-3 hover:opacity-70 transition-opacity"
         >
-          Meet Your Play Self →
+          <span className={`text-${colors.button} text-2xl font-semibold`}>
+            Meet Your Play Self
+          </span>
+          <Image 
+            src="/arrow_right.png" 
+            alt="next" 
+            width={24} 
+            height={24}
+            className="w-6 h-6"
+          />
         </motion.button>
       </motion.div>
     </div>
