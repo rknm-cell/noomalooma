@@ -2,9 +2,11 @@
 
 import { motion } from 'framer-motion';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import PlayButton from '../components/PlayButton';
 
 export default function HomePage() {
+  const router = useRouter();
   const letters = ['n', 'o', 'o', 'm', 'a', 'l', 'o', 'o', 'm', 'a'];
   const colors = [
     'var(--color-green)',
@@ -32,12 +34,11 @@ export default function HomePage() {
   };
 
   const handlePlayButtonClick = () => {
-    console.log('Play button clicked! Time to log a moment!');
-    // TODO: Implement play moment logging flow
+    router.push('/log');
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start bg-[var(--color-bg-main)] px-4 pt-8 sm:pt-16">
+    <main className="flex min-h-screen flex-col items-center justify-start px-4 pt-8 sm:pt-16">
       <div className="flex flex-wrap items-center justify-center gap-1 sm:gap-2">
         {letters.map((letter, index) => (
           <motion.span
@@ -75,6 +76,7 @@ export default function HomePage() {
       <div className="mt-16 sm:mt-20">
         <PlayButton onClick={handlePlayButtonClick} />
       </div>
+
     </main>
   );
 }

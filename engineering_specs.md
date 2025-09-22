@@ -16,33 +16,19 @@
 src/
 ├── app/
 │   ├── layout.tsx
-│   ├── page.tsx (Logging View)
-│   ├── play-log/
-│   │   └── page.tsx (Personal Play Log View)
+│   ├── page.tsx (Home View)
+│   ├── log/
+│   │   └── page.tsx (Logging View)
 │   └── globals.css
 ├── components/
-│   ├── PlayButton/
-│   │   ├── index.tsx
-│   │   └── PlayButton.styles.ts
-│   ├── FloatingClouds/
-│   │   ├── index.tsx
-│   │   └── FloatingClouds.styles.ts
-│   ├── PlayLogView/
-│   │   ├── index.tsx
-│   │   └── PlayLogView.styles.ts
-│   ├── MomentCard/
-│   │   ├── index.tsx
-│   │   └── MomentCard.styles.ts
-│   └── Navigation/
+│   └── PlayButton/
 │       ├── index.tsx
-│       └── Navigation.styles.ts
+│       └── PlayButton.styles.ts
 ├── hooks/
-│   ├── useLocalStorage.ts
-│   └── usePlayMoments.ts
+│   └── useLocalStorage.ts
 ├── utils/
-│   ├── storage.ts
-│   ├── mockData.ts
-│   └── insights.ts
+│   ├── storage.ts (localStorage integration)
+│   └── mockData.ts
 └── types/
     └── playMoment.ts
 ```
@@ -65,8 +51,8 @@ interface PlayMoment {
 ### Local Storage Structure
 ```typescript
 // Key: 'noomalooma-play-moments'
-// Value: { [date: string]: PlayMoment[] }
-// Example: { '2024-01-15': [moment1, moment2], '2024-01-16': [moment3] }
+// Value: PlayMoment[]
+// Simple array of play moments with timestamps
 ```
 
 ## Component Specifications
@@ -200,39 +186,28 @@ const useLocalStorage = <T>(key: string, initialValue: T) => {
 }
 ```
 
-### usePlayMoments Hook
+### useLocalStorage Hook
 ```typescript
-const usePlayMoments = () => {
-  // CRUD operations for play moments
-  // Date-based organization
-  // Local storage integration
+const useLocalStorage = <T>(key: string, initialValue: T) => {
+  // Implementation for local storage with React state sync
+  // Used for persisting play moments across sessions
 }
 ```
 
-### Storage Utils
+### Storage Implementation
 ```typescript
-// storage.ts
-export const savePlayMoment = (moment: PlayMoment) => void;
-export const getPlayMoments = (date?: string) => PlayMoment[];
-export const getPlayMomentsByMood = (mood: string) => PlayMoment[];
+// Direct localStorage integration in logging page
+const existingMoments = JSON.parse(localStorage.getItem('noomalooma-play-moments') ?? '[]') as PlayMoment[];
+existingMoments.push(moment);
+localStorage.setItem('noomalooma-play-moments', JSON.stringify(existingMoments));
 ```
 
-### Mock Data Generator
-```typescript
-// mockData.ts
-export const generateMockData = () => PlayMoment[];
-// Generates 1 week of sample data
-// Various moods, times, and play types
-```
-
-### AI Insights Generator
-```typescript
-// insights.ts
-export const generatePlayStyleInsights = (moments: PlayMoment[]) => Promise<string[]>;
-// Uses Vercel AI SDK
-// Generates personality insights
-// Mind map-style connections
-```
+### Design System Integration
+- **Colors**: Randomized selection from 8 design system colors
+- **Typography**: Plus Jakarta Sans with light font weight
+- **Layout**: 2D flat design with no drop shadows
+- **Animations**: Framer Motion for smooth interactions
+- **Responsive**: Mobile-first design approach
 
 ## Responsive Design
 
@@ -308,34 +283,34 @@ OPENAI_API_KEY=your_openai_key
 
 ## Development Timeline
 
-### Phase 1 (2 hours): Core Logging Interface
+### Phase 1 (2 hours): Core Logging Interface ✅
 - PlayButton component with animations
-- FloatingClouds component
-- Basic navigation
-- Local storage setup
+- Physics-based bouncing emojis
+- Page-based navigation
+- Local storage integration
 
-### Phase 2 (2 hours): Personal Play Log
-- PlayLogView component
-- MomentCard component
-- AI insights integration
-- Mock data generation
+### Phase 2 (2 hours): Enhanced Interactions ✅
+- Draggable emoji functionality
+- Improved collision physics
+- Viewport-sized boundaries
+- Visual feedback and animations
 
-### Phase 3 (1 hour): Data & Storage
-- useLocalStorage hook
-- usePlayMoments hook
-- Storage utilities
-- Date organization
-
-### Phase 4 (1 hour): Polish & Deploy
-- Responsive design
+### Phase 3 (1 hour): Polish & Optimization ✅
+- TypeScript improvements
 - Performance optimization
+- Design system integration
+- Responsive design
+
+### Phase 4 (1 hour): Deploy & Test
 - Vercel deployment
-- Final testing
+- Cross-device testing
+- Performance monitoring
+- User experience validation
 
 ## Success Criteria
-- Smooth animations on mobile devices
-- Intuitive navigation between views
-- Meaningful AI-generated insights
-- Visually cohesive design
-- Working local storage
+- Smooth physics animations on mobile devices ✅
+- Intuitive page-based navigation ✅
+- Interactive draggable emoji selection ✅
+- Visually cohesive 2D flat design ✅
+- Working local storage persistence ✅
 - Deployed and accessible prototype
