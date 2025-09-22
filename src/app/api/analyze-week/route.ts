@@ -58,9 +58,39 @@ export async function POST(request: Request): Promise<Response> {
     // Check if OpenAI API key is available, provide fallback analysis if not
     if (!env.OPENAI_API_KEY) {
       // Provide a simple fallback analysis
+      // Simple profile detection based on available data
+      const getSimpleProfile = (moments: PlayMoment[]) => {
+        if (moments.length === 0) return null;
+        
+        const colors = moments.map(m => m.color);
+        const emojis = moments.map(m => m.emoji);
+        const times = moments.map(m => new Date(m.timestamp).getHours());
+        
+        // Simple heuristics for profile detection
+        const hasCreativeEmojis = emojis.some(e => ['🎨', '🖌️', '✨', '🌈', '💡', '🎭', '📸', '✏️'].includes(e));
+        const hasNatureEmojis = emojis.some(e => ['🌱', '🌸', '☀️', '🌊', '🍃', '👃', '👂'].includes(e));
+        const hasMagicalEmojis = emojis.some(e => ['✨', '🌙', '🦄', '🪐', '🌌', '💫', '🧚'].includes(e));
+        const hasThoughtfulEmojis = emojis.some(e => ['🤔', '📚', '🧩', '♟️', '🔍', '💭', '🌿', '☕'].includes(e));
+        const hasSpontaneousEmojis = emojis.some(e => ['🎲', '🎪', '🚀', '⚡', '🎉', '🌟', '🎯', '🎮'].includes(e));
+        
+        const isEveningPlayer = times.filter(t => t >= 18 || t <= 6).length > times.length / 2;
+        const isMorningPlayer = times.filter(t => t >= 6 && t <= 12).length > times.length / 2;
+        const isConsistent = moments.length >= 5; // 5+ moments suggests consistency
+        
+        if (hasCreativeEmojis && isEveningPlayer) return { title: "The Creative Explorer", emoji: "🎨", desc: "You find joy in bringing ideas to life through artistic expression" };
+        if (hasNatureEmojis && isConsistent) return { title: "The Present Moment Seeker", emoji: "🧘", desc: "You've mastered the art of being fully present in simple moments" };
+        if (hasMagicalEmojis && isEveningPlayer) return { title: "The Imaginative Dreamer", emoji: "✨", desc: "You transform ordinary moments into magical experiences" };
+        if (hasThoughtfulEmojis && isMorningPlayer) return { title: "The Thoughtful Contemplator", emoji: "🤔", desc: "You choose activities that engage your mind and create space for deep thinking" };
+        if (hasSpontaneousEmojis) return { title: "The Spontaneous Adventurer", emoji: "🎲", desc: "You're energized by the unexpected and find play in moments others might miss" };
+        
+        return { title: "The Joy Collector", emoji: "✨", desc: "You see play everywhere and aren't afraid to capture it" };
+      };
+
+      const profile = getSimpleProfile(weeklyMoments);
+      
       const fallbackInsights: AnalysisInsights = {
         summary: weeklyMoments.length > 0 
-          ? `You're the kind of person who finds magic in ${weeklyMoments.length} moments this week! 🎉`
+          ? `You're a ${profile?.title} who found magic in ${weeklyMoments.length} moments this week! 🎉`
           : "You're ready to discover your play personality - let's start logging those moments!",
         patterns: weeklyMoments.length > 0 ? [
           {
@@ -69,21 +99,22 @@ export async function POST(request: Request): Promise<Response> {
             emoji: "🎯"
           },
           {
-            title: "Your Vibe",
+            title: "Your Signature Vibe",
             description: `You were feeling ${getMostCommonMood(weeklyMoments).toLowerCase()} most of the time`,
             emoji: "😊"
           }
         ] : [],
         personality: {
-          title: weeklyMoments.length > 0 ? "The Joy Collector" : "The Play Explorer",
-          description: weeklyMoments.length > 0 
-            ? "You see play everywhere and aren't afraid to capture it"
-            : "Ready to discover the playful side of everyday life",
-          emoji: "✨"
+          title: profile?.title || "The Play Explorer",
+          description: profile?.desc || "Ready to discover the playful side of everyday life",
+          emoji: profile?.emoji || "🔍"
         },
-        recommendations: [
-          "Try logging one tiny moment of play each day",
-          "Turn boring tasks into mini adventures"
+        recommendations: weeklyMoments.length > 0 ? [
+          "Keep exploring your unique play style",
+          "Try logging one tiny moment of play each day"
+        ] : [
+          "Start with one tiny moment of play today",
+          "Turn your coffee break into a mini adventure"
         ],
         funFact: weeklyMoments.length > 0 
           ? "You're building a treasure chest of happy memories!"
@@ -99,11 +130,14 @@ export async function POST(request: Request): Promise<Response> {
         patterns: [],
         personality: {
           title: "The Play Explorer",
-          description: "Ready to uncover the playful side of everyday life",
+          description: "Ready to uncover which of the 5 play profiles matches your unique style",
           emoji: "🔍"
         },
-        recommendations: ["Start with one tiny moment of play today", "Turn your coffee break into a mini adventure"],
-        funFact: "Your first play moment is waiting to be discovered!"
+        recommendations: [
+          "Start with one tiny moment of play today", 
+          "Try different play styles to discover your profile"
+        ],
+        funFact: "Your first play moment will reveal whether you're a Creative Explorer, Present Moment Seeker, or one of the other amazing play types!"
       };
       
       return Response.json({ insights: emptyWeekInsights });
@@ -119,31 +153,45 @@ export async function POST(request: Request): Promise<Response> {
       tags: moment.tags
     }));
 
-    const prompt = `You're creating a Spotify Wrapped-style analysis for someone's week of play moments. Make it fun, direct, and celebratory - like you're revealing their play personality to them for the first time. Be playful, use casual language, and make them feel seen and excited about their playfulness.
+    const prompt = `You're creating a Spotify Wrapped-style analysis for someone's week of play moments. Use the detailed play profiles below to identify their specific play personality type and create personalized insights.
 
 Play Moments Data:
 ${JSON.stringify(momentsData, null, 2)}
 
+Play Profile Reference:
+1. The Creative Explorer 🎨 - Purple/orange/pink colors, weekend/evening activity, artistic emojis, creative bursts
+2. The Thoughtful Contemplator 🤔 - Blue/green colors, morning/evening activity, introspective emojis, consistent patterns
+3. The Present Moment Seeker 🧘 - Green/earth tones, consistent daily activity, nature/sensory emojis, mindful presence
+4. The Spontaneous Adventurer 🎲 - Bright contrasting colors, random timing, excitement emojis, unpredictable patterns
+5. The Imaginative Dreamer ✨ - Purple/silver/gold colors, evening/weekend activity, magical emojis, fantasy focus
+
+Analyze their data to determine their primary play profile and create insights based on:
+- Timing patterns (morning/evening/weekend consistency)
+- Color psychology (warm/cool/earth/bright/pastel dominance)
+- Emoji sentiment (creative/thoughtful/present/spontaneous/imaginative)
+- Activity variety and clustering patterns
+- Consistency vs spontaneity
+
 Please provide a JSON response with this exact structure:
 {
-  "summary": "A fun, direct summary like 'You're the kind of person who...' or 'This week you proved that...'",
+  "summary": "A personalized summary like 'You're a Creative Explorer who...' or 'This week you proved you're a Present Moment Seeker by...'",
   "patterns": [
     {
-      "title": "Short, punchy title (like 'Peak Play Time' or 'Your Signature Move')",
-      "description": "One fun sentence about what this reveals",
+      "title": "Specific insight title (like 'Your Creative Peak' or 'Consistency Champion')",
+      "description": "Personalized insight based on their actual data patterns",
       "emoji": "relevant emoji"
     }
   ],
   "personality": {
-    "title": "Your Play Type (like 'The Spontaneous Sprinkler' or 'The Micro-Moment Master')",
-    "description": "One sentence that captures their play essence",
-    "emoji": "personality emoji"
+    "title": "Their specific play profile name (e.g., 'The Creative Explorer' or 'The Present Moment Seeker')",
+    "description": "Personalized description based on their actual patterns and the profile characteristics",
+    "emoji": "profile emoji"
   },
   "recommendations": [
-    "One playful suggestion",
-    "Another fun idea"
+    "Specific recommendation based on their profile type",
+    "Another personalized suggestion for their play style"
   ],
-  "funFact": "A surprising, delightful, or funny observation that makes them smile"
+  "funFact": "A surprising, specific observation about their unique play patterns"
 }`;
 
     const result = await generateText({
@@ -164,11 +212,14 @@ Please provide a JSON response with this exact structure:
         patterns: [],
         personality: {
           title: "The Joy Seeker",
-          description: "You find magic in the smallest moments",
+          description: "You find magic in the smallest moments and bring light to everyday life",
           emoji: "✨"
         },
-        recommendations: ["Keep capturing those playful moments!", "Share your joy with others"],
-        funFact: "Your playfulness is contagious!"
+        recommendations: [
+          "Keep capturing those playful moments!", 
+          "Try exploring different play profiles to find your perfect match"
+        ],
+        funFact: "Your playfulness is contagious - you're inspiring others to find joy too!"
       };
     }
 

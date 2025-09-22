@@ -18,6 +18,11 @@
   --color-text-white: #ffffff;
 }
 
+/* Global Background */
+body {
+  background-color: var(--color-bg-main);
+}
+
 /* Plus Jakarta Sans Font */
 .plus-jakarta-sans {
   font-family: "Plus Jakarta Sans", sans-serif;
