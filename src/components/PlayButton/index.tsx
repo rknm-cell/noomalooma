@@ -9,7 +9,7 @@ interface PlayButtonProps {
   isAnimating?: boolean;
 }
 
-export default function PlayButton({ onClick, isAnimating = false }: PlayButtonProps) {
+export default function PlayButton({ onClick }: PlayButtonProps) {
   const [isPressed, setIsPressed] = useState(false);
   const [buttonColor, setButtonColor] = useState('bg-green');
   const [currentFrame, setCurrentFrame] = useState(0);
@@ -30,7 +30,7 @@ export default function PlayButton({ onClick, isAnimating = false }: PlayButtonP
     // Randomize color on component mount
     const randomColor = colors[Math.floor(Math.random() * colors.length)] ?? 'bg-green';
     setButtonColor(randomColor);
-  }, []);
+  }, [colors]);
 
   // Majesty animation sequence - triggered on click
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function PlayButton({ onClick, isAnimating = false }: PlayButtonP
     
     const animate = () => {
       if (frameIndex < frames.length) {
-        setCurrentFrame(frames[frameIndex]);
+        setCurrentFrame(frames[frameIndex] ?? 0);
         frameIndex++;
       } else {
         // Animation complete, hide and reset

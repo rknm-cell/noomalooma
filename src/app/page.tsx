@@ -77,6 +77,23 @@ export default function HomePage() {
         <PlayButton onClick={handlePlayButtonClick} />
       </div>
 
+      {/* Analysis Link */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 1.5 }}
+        className="mt-8"
+      >
+        <motion.a
+          href="/analysis"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="inline-block bg-tan text-primary px-6 py-3 rounded-full font-semibold text-lg"
+        >
+          Analyze My Play Week 🎭
+        </motion.a>
+      </motion.div>
+
     </main>
   );
 }
