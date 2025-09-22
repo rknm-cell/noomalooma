@@ -8,17 +8,31 @@ import { useBouncingEmojis } from '../../hooks/useBouncingEmojis';
 import TextInputStep from '../../components/TextInputStep';
 import EmojiSelectionStep from '../../components/EmojiSelectionStep';
 import ColorSelectionStep from '../../components/ColorSelectionStep';
+import LogConfirmation from '../../components/LogConfirmation';
 
 export default function LogPage() {
   const router = useRouter();
   const [text, setText] = useState('');
   const [selectedEmoji, setSelectedEmoji] = useState<string>('😊');
   const [selectedColor, setSelectedColor] = useState<string>('bg-green');
-  const [currentStep, setCurrentStep] = useState<'text' | 'emoji' | 'color'>('text');
+  const [currentStep, setCurrentStep] = useState<'text' | 'emoji' | 'color' | 'confirmation'>('text');
+  const [loggedMoment, setLoggedMoment] = useState<PlayMoment | null>(null);
   const [isDragOverDropZone, setIsDragOverDropZone] = useState(false);
 
   const emojis = useMemo(() => ['😊', '🤪', '😌', '✨', '🎉', '🎨', '🎭', '🎪'], []);
   const colors = useMemo(() => ['bg-green', 'bg-purple', 'bg-pink', 'bg-orange', 'bg-lavender', 'bg-blue', 'bg-fuschia', 'bg-tan'], []);
+  
+  // Emoji to mood mapping
+  const emojiToMood = useMemo(() => ({
+    '😊': 'Happy',
+    '🤪': 'Silly', 
+    '😌': 'Peaceful',
+    '✨': 'Magical',
+    '🎉': 'Celebratory',
+    '🎨': 'Creative',
+    '🎭': 'Dramatic',
+    '🎪': 'Adventurous'
+  }), []);
 
   // Use bouncing emojis hook
   const { bouncingEmojis, setBouncingEmojis } = useBouncingEmojis();
@@ -50,7 +64,7 @@ export default function LogPage() {
       text,
       emoji: selectedEmoji,
       color: selectedColor,
-      mood: 'Playful',
+      mood: emojiToMood[selectedEmoji as keyof typeof emojiToMood] || 'Playful',
       tags: []
     };
     
@@ -59,7 +73,12 @@ export default function LogPage() {
     existingMoments.push(moment);
     localStorage.setItem('noomalooma-play-moments', JSON.stringify(existingMoments));
     
-    // Navigate back to home
+    // Show confirmation step
+    setLoggedMoment(moment);
+    setCurrentStep('confirmation');
+  };
+
+  const handleContinue = () => {
     router.push('/');
   };
 
@@ -76,15 +95,17 @@ export default function LogPage() {
         animate={{ scale: 1, opacity: 1, rotate: [0, 2, -1, 0] }}
         transition={{ duration: 0.4, ease: "easeOut" }}
       >
-        {/* Back button */}
-        <motion.button
-          onClick={handleBack}
-          className="absolute -top-4 -left-4 bg-gray-100 text-gray-600 w-8 h-8 rounded-full flex items-center justify-center font-jakarta border border-red-500"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          ←
-        </motion.button>
+        {/* Back button - hidden during confirmation */}
+        {currentStep !== 'confirmation' && (
+          <motion.button
+            onClick={handleBack}
+            className="absolute -top-4 -left-4 bg-gray-100 text-gray-600 w-8 h-8 rounded-full flex items-center justify-center font-jakarta border border-red-500"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            ←
+          </motion.button>
+        )}
 
         {/* Step 1: Text Input */}
         {currentStep === 'text' && (
@@ -115,6 +136,14 @@ export default function LogPage() {
             colors={colors}
             selectedColor={selectedColor}
             onColorSelect={handleColorSelect}
+          />
+        )}
+
+        {/* Step 4: Confirmation */}
+        {currentStep === 'confirmation' && loggedMoment && (
+          <LogConfirmation
+            moment={loggedMoment}
+            onContinue={handleContinue}
           />
         )}
       </motion.div>
