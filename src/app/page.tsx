@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import PlayButton from '../components/PlayButton';
-import BouncingOs from '../components/BouncingOs';
 
 export default function HomePage() {
   const router = useRouter();
